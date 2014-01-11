@@ -5131,6 +5131,10 @@
                 android:excludeFromRecents="true"
                 android:process=":ui">
         </activity>
+        <activity android:name="com.android.internal.app.GzospLogoActivity"
+                android:theme="@style/Theme.Wallpaper.NoTitleBar.Fullscreen"
+                android:process=":ui">
+        </activity>
         <activity android:name="com.android.internal.app.PlatLogoActivity"
                 android:theme="@style/Theme.DeviceDefault.DayNight"
                 android:configChanges="orientation|keyboardHidden"

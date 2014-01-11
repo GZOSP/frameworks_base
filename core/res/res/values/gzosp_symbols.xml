@@ -42,4 +42,9 @@
   <java-symbol type="string" name="reboot_to_bootloader_message" />
   <java-symbol type="string" name="reboot_title" />
   <java-symbol type="string" name="reboot_message" />
+
+  <!-- Gzosp Easter Egg -->
+  <java-symbol type="drawable" name="gzosp_bg_logo" />
+  <java-symbol type="drawable" name="gzosp_logo" />
+
 </resources>

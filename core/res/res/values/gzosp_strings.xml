@@ -17,6 +17,7 @@
 ** limitations under the License.
 */
 -->
+
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="reboot_to_recovery_title" translatable="false">Recovery</string>
     <string name="reboot_to_recovery_message" translatable="false">Rebooting to recovery</string>
@@ -24,4 +25,5 @@
     <string name="reboot_to_bootloader_message" translatable="false">Rebooting to bootloader</string>
     <string name="reboot_title">Reboot</string>
     <string name="reboot_message">Rebooting system</string>
+
 </resources>

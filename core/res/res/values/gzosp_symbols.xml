@@ -38,4 +38,13 @@
 
     <!-- Whether notify fingerprint client of successful cancelled authentication -->
     <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
+
+    <!-- HW Keys -->
+    <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
+    <java-symbol type="integer" name="config_longPressOnAppSwitchBehavior" />
+
+    <!-- Last app switch animations -->
+    <java-symbol type="anim" name="last_app_in" />
+    <java-symbol type="anim" name="last_app_out" />
+
 </resources>

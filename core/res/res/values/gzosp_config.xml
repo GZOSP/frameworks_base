@@ -21,4 +21,10 @@
     <string-array name="config_forceEnabledComponents" translatable="false">
     </string-array>
 
+    <!-- kill app long press back timeout -->
+    <integer name="config_backKillTimeout">1000</integer>
+
+    <!-- kill app long press back -->
+    <string name="app_killed_message">Application killed</string>
+
 </resources>

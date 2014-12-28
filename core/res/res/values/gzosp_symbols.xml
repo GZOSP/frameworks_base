@@ -32,4 +32,7 @@
     <java-symbol type="array" name="config_rebootActionsList" />
     <java-symbol type="array" name="values_globalActionsList" />
 
+    <!-- Screenrecord -->
+    <java-symbol type="bool" name="config_enableScreenrecordChord" />
+
 </resources>

@@ -1767,7 +1767,8 @@ public class LockSettingsService extends ILockSettings.Stub {
             Secure.LOCK_PATTERN_ENABLED,
             Secure.LOCK_BIOMETRIC_WEAK_FLAGS,
             Secure.LOCK_PATTERN_VISIBLE,
-            Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED
+            Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
+            Settings.Secure.LOCK_PASS_TO_SECURITY_VIEW
     };
 
     // Reading these settings needs the contacts permission

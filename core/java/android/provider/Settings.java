@@ -4499,6 +4499,12 @@ public final class Settings {
          */
         public static final String SYSTEM_UI_THEME = "system_ui_theme";
 
+        /**
+         * Toast icon
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
         /** End of VALIDUS system settings**/
 
         /**
@@ -4671,6 +4677,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER);
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER_DELAY);
             PRIVATE_SETTINGS.add(PROXIMITY_AUTO_SPEAKER_INCALL_ONLY);
+            PRIVATE_SETTINGS.add(TOAST_ICON);
         }
 
         /**

@@ -4371,6 +4371,16 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String BATTERY_BAR_CHARGING_COLOR = "battery_bar_charging_color";
+
+        /**
+         * @hide
+         */
+        public static final String BATTERY_BAR_BATTERY_LOW_COLOR = "battery_bar_battery_low_color";
+
+        /**
+         * @hide
+         */
         public static final String STATUS_BAR_LOGO = "status_bar_logo";
 
         /**

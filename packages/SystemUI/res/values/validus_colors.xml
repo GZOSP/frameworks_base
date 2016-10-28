@@ -24,4 +24,6 @@
     <color name="floating_action_button_icon_color">#ffffff</color>
 
     <color name="legacy_icon_background">#FFFFFF</color>
+
+    <color name="powersave_warning_color">#ff000000</color><!-- rgb 0 0 0 -->
 </resources>

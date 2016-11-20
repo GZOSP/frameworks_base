@@ -3872,6 +3872,13 @@ public final class Settings {
 
 
         /**
+         * Clean recent by shake
+         *
+         * @hide
+         */
+        public static final String SHAKE_CLEAN_RECENT = "shake_clean_recent";
+
+        /**
          * I am the lolrus.
          * <p>
          * Nonzero values indicate that the user has a bukkit.

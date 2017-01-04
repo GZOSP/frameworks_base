@@ -4093,6 +4093,18 @@ public final class Settings {
         private static final Validator SHOW_BATTERY_PERCENT_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
+         * Wheter to show network traffic indicator in statusbar
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
+
+        /**
+         * Network traffic inactivity threshold (default is 1 kBs)
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
+
+        /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
          * it to PRIVATE_SETTINGS below. Also add a validator that can validate
@@ -4278,6 +4290,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
         }
 
         /**

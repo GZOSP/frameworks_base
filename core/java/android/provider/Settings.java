@@ -4261,6 +4261,17 @@ public final class Settings {
         /** @hide */
         private static final Validator OMNI_SHOW_BATTERY_IMAGE_VALIDATOR =
                 BOOLEAN_VALIDATOR;
+        /**
+         * Wheter to show network traffic indicator in statusbar
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
+
+        /**
+         * Network traffic inactivity threshold (default is 1 kBs)
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -4473,6 +4484,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(KEY_CAMERA_DOUBLE_TAP_ACTION);
             PRIVATE_SETTINGS.add(OMNI_USE_BOTTOM_GESTURE_NAVIGATION);
             PRIVATE_SETTINGS.add(OMNI_SHOW_BATTERY_IMAGE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
         }
 
         /**

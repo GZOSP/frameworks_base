@@ -48,6 +48,8 @@ public final class Prefs {
         Key.QS_WORK_ADDED,
         Key.QS_NIGHTDISPLAY_ADDED,
         Key.SEEN_MULTI_USER,
+        Key.QS_AMBIENT_DOZE,
+        Key.QS_AMBIENT_PICKUP,
     })
     public @interface Key {
         @Deprecated
@@ -75,6 +77,8 @@ public final class Prefs {
         @Deprecated
         String QS_NIGHTDISPLAY_ADDED = "QsNightDisplayAdded";
         String SEEN_MULTI_USER = "HasSeenMultiUser";
+        String QS_AMBIENT_DOZE = "QsAmbientDoze";
+        String QS_AMBIENT_PICKUP = "QsAmbientPickup";
     }
 
     public static boolean getBoolean(Context context, @Key String key, boolean defaultValue) {

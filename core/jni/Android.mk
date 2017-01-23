@@ -277,6 +277,8 @@ LOCAL_SHARED_LIBRARIES := \
     libimg_utils \
     libnetd_client \
     libradio \
+    libsudautils \
+    libsuda-phoneloc-jni \
     libsoundtrigger \
     libminikin \
     libprocessgroup \

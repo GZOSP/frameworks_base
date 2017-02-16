@@ -11137,6 +11137,12 @@ public final class Settings {
                 "location_settings_link_to_permissions_enabled";
 
         /**
+         * Audio focus mode for ringtones when headset is connected
+         * @hide
+         */
+        public static final String RINGTONE_FOCUS_MODE = "ringtone_focus_mode";
+
+        /**
          * Flag to enable use of RefactoredBackupManagerService.
          *
          * @hide

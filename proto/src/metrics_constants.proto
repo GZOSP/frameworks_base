@@ -6431,6 +6431,9 @@ message MetricsEvent {
 
     // ---- End Q Constants, all Q constants go above this line ----
 
+    // ACTION: Custom GZOSP metrics
+    GZOSP_METRICS = 10000;
+
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
   }

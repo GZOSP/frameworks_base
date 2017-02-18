@@ -63,5 +63,10 @@
     <string name="tuner_cellular_title">Mobile</string>
     <string name="tuner_show_secure_title">Show security footer</string>
 
+    <!-- ADB over network tile -->
+    <string name="quick_settings_network_adb_enabled_label">Enabled</string>
+    <string name="quick_settings_network_adb_disabled_label">Disabled</string>
+    <string name="quick_settings_network_adb_label">ADB over network</string>
+    <string name="quick_settings_network_adb_toast">USB debugging is not enabled</string>
 </resources>
 

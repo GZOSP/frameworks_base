@@ -255,7 +255,9 @@ public class AppOpsManager {
      /** @hide */
     public static final int OP_BOOT_COMPLETED = 70;
     /** @hide */
-    public static final int _NUM_OP = 71;
+    public static final int OP_AUTO_START = 71;
+    /** @hide */
+    public static final int _NUM_OP = 72;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -373,6 +375,8 @@ public class AppOpsManager {
 
     // Warning: If an permission is added here it also has to be added to
     // com.android.packageinstaller.permission.utils.EventLogger
+    /** @hide */
+    public static final String OPSTR_AUTO_START = "android:auto_start";
     private static final int[] RUNTIME_AND_APPOP_PERMISSIONS_OPS = {
             // RUNTIME PERMISSIONS
             // Contacts
@@ -498,7 +502,8 @@ public class AppOpsManager {
             OP_PICTURE_IN_PICTURE,
             OP_INSTANT_APP_START_FOREGROUND,
             OP_ANSWER_PHONE_CALLS,
-            OP_BOOT_COMPLETED
+            OP_BOOT_COMPLETED,
+            OP_AUTO_START,
     };
 
     /**
@@ -577,6 +582,7 @@ public class AppOpsManager {
             OPSTR_INSTANT_APP_START_FOREGROUND,
             OPSTR_ANSWER_PHONE_CALLS,
             OPSTR_BOOT_COMPLETED,
+            OPSTR_AUTO_START,
     };
 
     /**
@@ -655,6 +661,7 @@ public class AppOpsManager {
             "INSTANT_APP_START_FOREGROUND",
             "ANSWER_PHONE_CALLS",
             "BOOT_COMPLETED",
+            "AUTO_START",
     };
 
     /**
@@ -733,6 +740,7 @@ public class AppOpsManager {
             Manifest.permission.INSTANT_APP_FOREGROUND_SERVICE,
             Manifest.permission.ANSWER_PHONE_CALLS,
             Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            null, // no permission for auto start
     };
 
     /**
@@ -812,6 +820,7 @@ public class AppOpsManager {
             null, // INSTANT_APP_START_FOREGROUND
             null, // ANSWER_PHONE_CALLS
             null, //BOOT_COMPLETED
+            null, // OP_AUTO_START
     };
 
     /**
@@ -890,6 +899,7 @@ public class AppOpsManager {
             false, // INSTANT_APP_START_FOREGROUND
             false, // ANSWER_PHONE_CALLS
             false, // BOOT_COMPLETED
+            false, // OP_AUTO_START
     };
 
     /**
@@ -967,6 +977,7 @@ public class AppOpsManager {
             AppOpsManager.MODE_DEFAULT,  // OP_INSTANT_APP_START_FOREGROUND
             AppOpsManager.MODE_ALLOWED, // ANSWER_PHONE_CALLS
             AppOpsManager.MODE_ALLOWED, // OP_BOOT_COMPLETED
+            AppOpsManager.MODE_ALLOWED,  //OP_AUTO_START
     };
 
     /**
@@ -1048,6 +1059,7 @@ public class AppOpsManager {
             false,
             false, // ANSWER_PHONE_CALLS
             false, // OP_BOOT_COMPLETED
+            false, //OP_AUTO_START
     };
 
     /**

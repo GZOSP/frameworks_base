@@ -21,6 +21,10 @@
     <string name="global_action_restart_advanced">Advanced reboot</string>
     <string name="global_action_restart_recovery">Go to recovery</string>
     <string name="global_action_restart_bootloader">Go to bootloader</string>
+    <!-- Content description for Accessibility on unlocked tasks in recents -->
+    <string name="task_unlocked_desc">Prevent <xliff:g id="task">%1$s</xliff:g> from being dismissed</string>
+    <!-- Content description for Accessibility on locked tasks in recents -->
+    <string name="task_locked_desc">Allow <xliff:g id="task">%1$s</xliff:g> to be dismissed</string>
 
     <string name="summary_empty" translatable="false"></string>
 

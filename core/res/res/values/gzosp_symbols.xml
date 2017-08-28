@@ -1,5 +1,5 @@
 <!--
-     Copyright (C) 2017 GZOSP
+     Copyright (C) 2017-2018 GZOSP
      Copyright (c) 2013, The Linux Foundation. All rights reserved.
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -25,5 +25,13 @@
 
     <!-- Doze always on default value -->
     <java-symbol type="bool" name="config_dozeAlwaysOnDisplayEnabledDefault" />
+
+    <!-- Powermenu -->
+    <java-symbol type="string" name="reboot_to_recovery_title" />
+    <java-symbol type="string" name="reboot_to_recovery_message" />
+    <java-symbol type="string" name="reboot_to_bootloader_title" />
+    <java-symbol type="string" name="reboot_to_bootloader_message" />
+    <java-symbol type="string" name="reboot_title" />
+    <java-symbol type="string" name="reboot_message" />
 
 </resources>

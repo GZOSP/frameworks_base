@@ -30,10 +30,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.util.FloatProperty;
+import android.util.Log;
 import android.util.MathUtils;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -231,12 +234,26 @@ public class NotificationPanelView extends PanelView implements
     private boolean mNoVisibleNotifications = true;
     private ValueAnimator mDarkAnimator;
 
+    // cardinal additions start
+    private int mStatusBarHeaderHeight;
+    private GestureDetector mDoubleTapGesture;
+
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(!DEBUG);
         mFalsingManager = FalsingManager.getInstance(context);
         mQsOverscrollExpansionEnabled =
                 getResources().getBoolean(R.bool.config_enableQuickSettingsOverscrollExpansion);
+        mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                if(pm != null) {
+                    pm.goToSleep(e.getEventTime());
+                }
+                return true;
+            }
+        });
     }
 
     public void setStatusBar(StatusBar bar) {
@@ -299,6 +316,8 @@ public class NotificationPanelView extends PanelView implements
                 R.dimen.max_notification_fadeout_height);
         mIndicationBottomPadding = getResources().getDimensionPixelSize(
                 R.dimen.keyguard_indication_bottom_padding);
+        mStatusBarHeaderHeight = getResources().getDimensionPixelSize(
+                R.dimen.status_bar_height);
     }
 
     public void updateResources() {
@@ -774,6 +793,12 @@ public class NotificationPanelView extends PanelView implements
         if (mBlockTouches || (mQs != null && mQs.isCustomizing())) {
             return false;
         }
+        if (!mQsExpanded
+                && mDoubleTapToSleepEnabled
+                && event.getY() < mStatusBarHeaderHeight) {
+            mDoubleTapGesture.onTouchEvent(event);
+        }
+
         initDownStates(event);
         if (mListenForHeadsUp && !mHeadsUpTouchHelper.isTrackingHeadsUp()
                 && mHeadsUpTouchHelper.onInterceptTouchEvent(event)) {
@@ -2548,5 +2573,9 @@ public class NotificationPanelView extends PanelView implements
 
     public void setPulsing(boolean pulsing) {
         mKeyguardStatusView.setPulsing(pulsing);
+    }
+
+    public void updateDoubleTapToSleep(boolean doubleTapToSleepEnabled) {
+        mDoubleTapToSleepEnabled = doubleTapToSleepEnabled;
     }
 }

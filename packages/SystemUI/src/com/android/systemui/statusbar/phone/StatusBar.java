@@ -546,7 +546,11 @@ public class StatusBar extends SystemUI implements DemoMode,
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_SHOW),
                     false, this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE),
+                    false, this, UserHandle.USER_ALL);
             update();
+            setShowNavBar();
         }
 
         @Override
@@ -561,6 +565,10 @@ public class StatusBar extends SystemUI implements DemoMode,
                 update();
                 setShowNavBar();   
              }
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE))) {
+		        setDoubleTapSleep();
+             }
          }
 
         public void update() {
@@ -568,6 +576,8 @@ public class StatusBar extends SystemUI implements DemoMode,
             enableShakeCleanByUser = Settings.System.getIntForUser(
                     resolver, Settings.System.SHAKE_CLEAN_NOTIFICATION, 1,
                     UserHandle.USER_CURRENT) == 1;
+            setShowNavBar();
+            setDoubleTapSleep();
         }
     }
 
@@ -580,6 +590,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             if (showNavBarBool !=  mShowNavBar){
                 updateNavigationBar();
             }
+        }
+    }
+
+    private void setDoubleTapSleep() {
+        if (mStatusBarWindow != null) {
+            mStatusBarWindow.updateSettings();
         }
     }
 

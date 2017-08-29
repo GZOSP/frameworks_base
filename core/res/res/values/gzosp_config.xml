@@ -66,4 +66,7 @@
     <integer name="config_longPressOnCameraKeyBehavior">0</integer>
     <integer name="config_doubleTapOnCameraKeyBehavior">0</integer>
 
+    <integer name="config_buttonBrightnessSettingDefault">255</integer>
+    <bool name="config_deviceHasVariableButtonBrightness">false</bool>
+
 </resources>

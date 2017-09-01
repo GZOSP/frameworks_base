@@ -205,4 +205,11 @@ public class GzospUtils {
             pm.goToSleep(SystemClock.uptimeMillis());
         }
     }
+
+    public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
+    }
 }

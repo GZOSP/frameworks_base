@@ -147,4 +147,9 @@ interface IStatusBarService
      * display.
      */
     void suppressAmbientDisplay(boolean suppress);
+
+    /**
+     * Gzosp
+     */
+    void toggleCameraFlash();
 }

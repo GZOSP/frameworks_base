@@ -18,4 +18,8 @@
 -->
 <resources>
     <color name="battery_level_good_color">#ff319111</color><!-- green -->
+
+    <!-- Floating action button -->
+    <color name="fab_color">@*android:color/material_deep_teal_500</color>
+    <color name="floating_action_button_icon_color">#ffffff</color>
 </resources>

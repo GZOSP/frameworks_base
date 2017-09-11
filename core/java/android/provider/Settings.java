@@ -4331,6 +4331,12 @@ public final class Settings {
         public static final String GESTURE_ANYWHERE_SHOW_TRIGGER = "gesture_anywhere_show_trigger";
 
         /**
+         * Whether the Home button works during call
+         * @hide
+         */
+        public static final String ALLOW_INCALL_HOME = "allow_incall_home";
+
+        /**
          * @hide
          */
         public static final String STATUS_BAR_LOGO = "status_bar_logo";

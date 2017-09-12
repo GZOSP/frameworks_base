@@ -3928,8 +3928,6 @@ public final class Settings {
         /** @hide */
         private static final Validator SHOW_BATTERY_PERCENT_VALIDATOR = sBooleanValidator;
 
-        /** Beginning of ABC custom setttings**/
-
         /**
          * Use latest screen-on brightness value for Ambient Display
          * @hide
@@ -3947,6 +3945,8 @@ public final class Settings {
          * @hide
          */
         public static final String ALERT_ON_CHARGED_LEVEL = "alert_on_charged_level";
+
+        /** Beginning of VALIDUS custom setttings**/
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -4204,7 +4204,17 @@ public final class Settings {
          */
         public static final String SLIM_RECENTS_BLACKLIST_VALUES = "slim_recents_blacklist_values";
 
-        /** End of ABC system settings**/
+        /**
+         * Immersive recents options
+         *
+         * 0 = Default AOSP look
+         * 1 = Statusbar only
+         * 2 = Navbar only
+         * 3 = Fullscreen
+         */
+        public static final String IMMERSIVE_RECENTS = "immersive_recents";
+
+        /** End of VALIDUS system settings**/
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

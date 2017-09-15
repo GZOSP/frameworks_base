@@ -4337,6 +4337,12 @@ public final class Settings {
         public static final String ALLOW_INCALL_HOME = "allow_incall_home";
 
         /**
+         * volume answer
+         * @hide
+         */
+        public static final String ANSWER_VOLUME_BUTTON_BEHAVIOR_ANSWER = "call_volume_answer";
+
+        /**
          * @hide
          */
         public static final String STATUS_BAR_LOGO = "status_bar_logo";

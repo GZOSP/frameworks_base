@@ -2059,4 +2059,6 @@
     <!-- Gesture Anywhere -->
     <string name="gestures_message">Draw your gesture here</string>
 
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VOLTE</string>
 </resources>

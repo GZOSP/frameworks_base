@@ -380,6 +380,9 @@ public class ZygoteProcess {
         } else if (mountExternal == Zygote.MOUNT_EXTERNAL_WRITE) {
             argsForZygote.add("--mount-external-write");
         }
+        if (extraArgs != null && extraArgs.toString().contains("--refresh-theme")) {
+            argsForZygote.add("--refresh_theme");
+        }
         argsForZygote.add("--target-sdk-version=" + targetSdkVersion);
 
         // --setgroups is a comma-separated list
@@ -413,7 +416,6 @@ public class ZygoteProcess {
         if (appDataDir != null) {
             argsForZygote.add("--app-data-dir=" + appDataDir);
         }
-
         if (invokeWith != null) {
             argsForZygote.add("--invoke-with");
             argsForZygote.add(invokeWith);

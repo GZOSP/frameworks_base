@@ -4243,6 +4243,13 @@ public final class Settings {
         public static final String POWERMENU_LOCKDOWN = "powermenu_lockdown";
 
         /**
+         * Whether to display screenshot in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_SCREENSHOT = "powermenu_screenshot";
+
+        /**
          * Whether to display settings in the power menu
          *
          * @hide
@@ -4276,6 +4283,13 @@ public final class Settings {
          * @hide
          */
         public static final String POWERMENU_POWER = "powermenu_power";
+
+        /**
+         * Whether to display the users option in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_USERS = "powermenu_users";
 
         /**
          * Whether to use gesture anywhere feature.

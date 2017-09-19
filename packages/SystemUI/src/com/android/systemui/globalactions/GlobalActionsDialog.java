@@ -20,6 +20,7 @@ import com.android.internal.colorextraction.ColorExtractor.GradientColors;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.EmergencyAffordanceManager;
+import com.android.internal.util.validus.ValidusUtils;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.widget.LockPatternUtils;
@@ -119,6 +120,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
     private static final String GLOBAL_ACTION_KEY_ASSIST = "assist";
     private static final String GLOBAL_ACTION_KEY_RESTART = "restart";
     private static final String GLOBAL_ACTION_KEY_RESTART_RECOVERY = "recovery";
+    private static final String GLOBAL_ACTION_KEY_SCREENSHOT = "screenshot";
 
     private static final int SHOW_TOGGLES_BUTTON = 1;
     private static final int RESTART_RECOVERY_BUTTON = 2;
@@ -382,7 +384,8 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                     mItems.add(mSilentModeAction);
                 }
             } else if (GLOBAL_ACTION_KEY_USERS.equals(actionKey)) {
-                if (SystemProperties.getBoolean("fw.power_user_switcher", false)) {
+                if (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWERMENU_USERS, 0) == 1) {
                     addUsersToMenu(mItems);
                 }
             } else if (GLOBAL_ACTION_KEY_SETTINGS.equals(actionKey)) {
@@ -408,6 +411,11 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 if (Settings.System.getInt(mContext.getContentResolver(),
                         Settings.System.POWERMENU_RESTART_RECOVERY, 1) == 1) {
                     mItems.add(mShowAdvancedToggles);
+                }
+            } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
+                if (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWERMENU_SCREENSHOT, 0) == 1) {
+                    mItems.add(new ScreenshotAction());
                 }
             } else {
                 Log.e(TAG, "Invalid global action key " + actionKey);
@@ -504,6 +512,36 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         @Override
         public void onPress() {
             mWindowManagerFuncs.reboot(false);
+        }
+    }
+
+    private final class ScreenshotAction extends SinglePressAction implements LongPressAction {
+
+        private ScreenshotAction() {
+            super(com.android.systemui.R.drawable.ic_lock_screenshot,
+                    com.android.systemui.R.string.quick_settings_screenshot_label);
+        }
+
+        @Override
+        public void onPress() {
+            ValidusUtils.takeScreenshot(true);
+        }
+
+
+        @Override
+        public boolean onLongPress() {
+            ValidusUtils.takeScreenshot(false);
+            return true;
+        }
+
+        @Override
+        public boolean showDuringKeyguard() {
+            return true;
+        }
+
+        @Override
+        public boolean showBeforeProvisioning() {
+            return true;
         }
     }
 

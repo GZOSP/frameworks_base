@@ -2374,7 +2374,9 @@
         <item>power</item>
         <item>restart</item>
         <item>recovery</item>
-        <item>bugreport</item>
+        <item>airplane</item>
+        <item>settings</item>
+        <item>lockdown</item>
         <item>users</item>
     </string-array>
 

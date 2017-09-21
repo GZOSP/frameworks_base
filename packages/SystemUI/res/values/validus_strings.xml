@@ -76,4 +76,8 @@
     <string name="notification_channel_charge_alert">Optimal battery charge level</string>
 
      <string name="recents_app_killed">App killed</string>
+
+    <string name="navMediaArrowsExcludeList" translatable="false">
+        chrome,youtube,netflix,firefox,dolphin,opera
+    </string>
 </resources>

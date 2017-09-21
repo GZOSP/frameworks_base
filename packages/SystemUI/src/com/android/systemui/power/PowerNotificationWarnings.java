@@ -427,6 +427,29 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     }
 
     @Override
+    public void notifyBatteryPlugged() {
+        if (DEBUG) {
+            Slog.d(TAG, "notifyBatteryPlugged");
+        }
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.VIBRATION_ON_CHARGE_STATE_CHANGED, 1,
+                UserHandle.USER_CURRENT) == 1) {
+            playBatteryPluggedVibration();
+        }
+    }
+
+    private void playBatteryPluggedVibration() {
+        if (DEBUG) {
+            Slog.d(TAG, "playing battery plugged vibration");
+        }
+        final int mode = mAudioMan.getRingerModeInternal();
+        if (mode == AudioManager.RINGER_MODE_NORMAL ||
+                mode == AudioManager.RINGER_MODE_VIBRATE) {
+            mVibrator.vibrate(VibrationEffect.createOneShot(150, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+    }
+
+    @Override
     public void dismissInvalidChargerWarning() {
         dismissInvalidChargerNotification();
     }

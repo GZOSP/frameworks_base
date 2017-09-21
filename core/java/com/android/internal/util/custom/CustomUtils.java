@@ -16,17 +16,22 @@
 
 package com.android.internal.util.custom;
 
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.input.InputManager;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.RemoteException;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
+import android.provider.Settings;
+
 
 /**
  * Some custom utilities
@@ -67,5 +72,31 @@ public class CustomUtils {
                         InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
             }
         }, 20);
+    }
+
+    public static boolean deviceSupportNavigationBar(Context context) {
+        return deviceSupportNavigationBarForUser(context, UserHandle.USER_CURRENT);
+    }
+
+    public static boolean deviceSupportNavigationBarForUser(Context context, int userId) {
+        final boolean showByDefault = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar);
+        final int hasNavigationBar = Settings.System.getIntForUser(
+                context.getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW, -1,
+                userId);
+
+        if (hasNavigationBar == -1) {
+            String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                return false;
+            } else if ("0".equals(navBarOverride)) {
+                return true;
+            } else {
+                return showByDefault;
+            }
+        } else {
+            return hasNavigationBar == 1;
+        }
     }
 }

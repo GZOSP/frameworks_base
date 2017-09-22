@@ -43,6 +43,7 @@ public class SudaUtils {
     }
 
     //2017年法定节假日
+    private static int YEAR = 2017;
     //一月
     private static int[] JANH = {1, 2, 27, 28, 29, 30, 31};
     //二月
@@ -97,7 +98,8 @@ public class SudaUtils {
 
     public static boolean isChineseHoliday(int y, int m, int d) {
         boolean bResult = false;
-        if( y == 2017 ){
+        if( y == YEAR-1 && m == 12 && d == 31 ) return true;
+        if( y == YEAR ){
             switch(m) {
                 case 1:
                   for(int tmp:JANH){

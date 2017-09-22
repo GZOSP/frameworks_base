@@ -62,6 +62,10 @@ public class Constant {
                     "0715 解放紀念", "0808 父親節", "0903 軍人節", "0928 孔子誕辰", "1010 國慶節", "1024 聯合國日", "1025 臺灣光復",
                     "1112 國父誕辰", "1031 萬聖節", "1224 平安夜", "1225 聖誕節"};
 
+    public static final String[] SPEC_DAY_CN = {"5,2,0,母亲节", "6,3,0,父亲节", "11,4,4,感恩节"};
+    public static final String[] SPEC_DAY_HK = {"5,2,0,母親節", "6,3,0,父親節", "11,4,4,感恩節"};
+    public static final String[] SPEC_DAY_TW = {"5,2,0,母親節", "11,4,4,感恩節"};
+
     public static String[] getAnimals() {
         Locale locale = Resources.getSystem().getConfiguration().locale;
         if (locale.getCountry().equals("CN")) {
@@ -88,6 +92,18 @@ public class Constant {
             return HOLIDAY_TW;	
         }
         return HOLIDAY_CN;
+    }
+
+    public static String[] getSpecday() {
+        Locale locale = Resources.getSystem().getConfiguration().locale;
+        if (locale.getCountry().equals("CN")) {
+            return SPEC_DAY_CN;		
+        } else if (locale.getCountry().equals("HK")) {
+            return SPEC_DAY_HK;
+        } else if (locale.getCountry().equals("TW")) {
+            return SPEC_DAY_TW;	
+        }
+        return SPEC_DAY_CN;
     }
 
     public static String getLeap(){

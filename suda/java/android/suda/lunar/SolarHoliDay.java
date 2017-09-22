@@ -17,9 +17,11 @@
 
 package android.suda.lunar;
 
+import java.util.Calendar;
+
 public class SolarHoliDay {
 
-    public static String getSolarHoliDay(int currentMonth, int currentDayForMonth) {
+    public static String getSolarHoliDay(int currentYear, int currentMonth, int currentDayForMonth) {
         String num_date = String.format("%02d", currentMonth + 1) + "" + String.format("%02d", currentDayForMonth);
         String[] solarHolidayArray = Constant.getSolarHoliday();
         for(int i = 0; i < solarHolidayArray.length; i++) {
@@ -27,6 +29,35 @@ public class SolarHoliDay {
             if (solarHolidayDateStr[0].equals(num_date)) {
                 return solarHolidayDateStr[1];
             }
+        }
+        return getSpecialDay(currentYear, currentMonth, currentDayForMonth);
+    }
+
+    public static String getSpecialDay(int year, int month, int day) {
+        String[] specDays = Constant.getSpecday();
+        for (String specDay : specDays) {
+            int monthIndex = Integer.parseInt(specDay.split(",")[0]) - 1;
+            if (month != monthIndex) {
+                continue;
+            }
+            int weekIndex = Integer.parseInt(specDay.split(",")[1]);
+            int dayIndex = Integer.parseInt(specDay.split(",")[2]);
+            String dayName = specDay.split(",")[3];
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+            int mark = dayIndex - dayOfWeek;
+            if (mark >= 0) {
+                weekIndex--;
+            }
+            int addDay = mark + 7 * (weekIndex);
+            calendar.add(Calendar.DATE, addDay);
+            if (calendar.get(Calendar.DATE) == day) {
+                return dayName;
+            }
+
         }
         return "";
     }

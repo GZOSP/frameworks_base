@@ -3870,13 +3870,18 @@ public final class Settings {
          */
         public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
 
-
         /**
          * Clean recent by shake
          *
          * @hide
          */
         public static final String SHAKE_CLEAN_RECENT = "shake_clean_recent";
+
+          /**
+         * Clean notification by shake
+         * @hide
+         */
+        public static final String SHAKE_CLEAN_NOTIFICATION = "shake_clean_notification";
 
         /**
          * I am the lolrus.

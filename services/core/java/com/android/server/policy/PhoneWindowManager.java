@@ -232,6 +232,7 @@ import android.view.animation.AnimationUtils;
 import android.view.autofill.AutofillManagerInternal;
 import android.view.inputmethod.InputMethodManagerInternal;
 
+import android.widget.Toast;
 import com.android.internal.R;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.policy.IKeyguardDismissCallback;
@@ -241,6 +242,7 @@ import com.android.internal.policy.IKeyguardService;
 import com.android.internal.policy.IShortcutService;
 import com.android.internal.policy.PhoneWindow;
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.ActionUtils;
 import com.android.internal.util.custom.CustomUtils;
 import com.android.internal.util.ScreenShapeHelper;
 import com.android.internal.widget.PointerLocationView;
@@ -259,6 +261,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Locale;
 import java.lang.reflect.Constructor;
 
 import dalvik.system.PathClassLoader;
@@ -344,6 +347,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_CAMERA = 6;
     private static final int KEY_ACTION_LAST_APP = 7;
     private static final int KEY_ACTION_SPLIT_SCREEN = 8;
+    private static final int KEY_ACTION_KILL_APP = 9;
 
     // Special values, used internal only.
     private static final int KEY_ACTION_HOME = 100;
@@ -1763,6 +1767,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private final ScreenshotRunnable mScreenshotRunnable = new ScreenshotRunnable();
+ 
+    Runnable mKillApp = new Runnable() {
+        public void run() {
+            if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
+                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
+                Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
+             }
+        }
+    };
 
     @Override
     public void showGlobalActions() {
@@ -3873,6 +3886,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case KEY_ACTION_APP_SWITCH:
                 toggleRecentApps();
+                break;
+            case KEY_ACTION_KILL_APP:
+                ActionUtils.killForegroundApp(mContext, mCurrentUserId);
                 break;
             case KEY_ACTION_SEARCH:
                 launchAssistAction(null, -1);

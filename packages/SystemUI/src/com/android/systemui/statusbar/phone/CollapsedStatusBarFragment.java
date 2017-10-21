@@ -46,6 +46,11 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 
+import android.widget.ImageView;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+
 /**
  * Contains the collapsed status bar and handles hiding/showing based on disable flags
  * and keyguard state. Also manages lifecycle to make sure the views it contains are being
@@ -66,7 +71,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private SignalClusterView mSignalClusterView;
 
     // Validus logo
-    private View mValidusLogo;
+    private ImageView mValidusLogo;
+    private int mLogoStyle;
     private boolean mShowLogo;
     private final Handler mHandler = new Handler();
 
@@ -78,6 +84,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         void observe() {
             getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_LOGO),
+                    false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_LOGO_STYLE),
                     false, this, UserHandle.USER_ALL);
         }
 
@@ -306,9 +315,49 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void updateSettings(boolean animate) {
+        Drawable logo = null;
+
         mShowLogo = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO, 0,
                 UserHandle.USER_CURRENT) == 1;
+        mLogoStyle = Settings.System.getIntForUser(
+                getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_STYLE, 0,
+                UserHandle.USER_CURRENT);
+
+        switch(mLogoStyle) {
+                // Wolf Shield
+            case 0:
+                logo = getContext().getResources().getDrawable(R.drawable.status_bar_logo);
+                break;
+                // GZR Skull
+            case 1:
+                logo = getContext().getResources().getDrawable(R.drawable.status_bar_gzr_skull_logo);
+                break;
+                // GZR Circle
+            case 2:
+                logo = getContext().getResources().getDrawable(R.drawable.status_bar_gzr_circle_logo);
+                break;
+                // GZR Clown
+            case 3:
+                logo = getContext().getResources().getDrawable(R.drawable.status_bar_clown_logo);
+                break;
+                // Default
+            default:
+                logo = getContext().getResources().getDrawable(R.drawable.status_bar_logo);
+                break;
+        }
+
+        if (mValidusLogo != null) {
+            if (logo == null) {
+                // Something wrong. Do not show anything
+                mValidusLogo.setImageDrawable(logo);
+                mShowLogo = false;
+                return;
+            }
+
+            mValidusLogo.setImageDrawable(logo);
+        }
+
         if (mNotificationIconAreaInner != null) {
             if (mShowLogo) {
                 if (mNotificationIconAreaInner.getVisibility() == View.VISIBLE) {

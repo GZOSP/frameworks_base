@@ -339,4 +339,7 @@
     <!-- Whether to show operator name in the status bar -->
     <bool name="config_showOperatorNameInStatusBar">false</bool>
 
+    <!-- config for showing AM/PM on lock screen in 12hour format -->
+    <bool name="config_showAmpm">true</bool>
+
 </resources>

@@ -32,6 +32,9 @@ import com.android.systemui.R;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.Calendar;
+import android.suda.lunar.Lunar;
+import android.suda.utils.SudaUtils;
 
 public class DateView extends TextView {
     private static final String TAG = "DateView";
@@ -119,9 +122,17 @@ public class DateView extends TextView {
             mDateFormat = format;
         }
 
+	    String zhDate = "";
+	    if (SudaUtils.isSupportLanguage(true)) {
+                Calendar cal = Calendar.getInstance();
+	        cal.setTime(mCurrentTime);
+                Lunar lunar = new Lunar(cal);
+                zhDate = " " + lunar.toShortenSrting();
+	    }
+
         mCurrentTime.setTime(System.currentTimeMillis());
 
-        final String text = mDateFormat.format(mCurrentTime);
+        final String text = mDateFormat.format(mCurrentTime) + zhDate;
         if (!text.equals(mLastText)) {
             setText(text);
             mLastText = text;

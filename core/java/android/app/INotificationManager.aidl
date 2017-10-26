@@ -53,6 +53,8 @@ interface INotificationManager
     boolean canShowBadge(String pkg, int uid);
     void setNotificationsEnabledForPackage(String pkg, int uid, boolean enabled);
     boolean areNotificationsEnabledForPackage(String pkg, int uid);
+    void setPackagePriority(String pkg, int uid, int importance);
+    int getPackagePriority(String pkg, int uid);
     boolean areNotificationsEnabled(String pkg);
     int getPackageImportance(String pkg);
 

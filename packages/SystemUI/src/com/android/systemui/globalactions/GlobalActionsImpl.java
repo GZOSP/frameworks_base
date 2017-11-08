@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.PowerManager;
+import android.view.ContextThemeWrapper;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,10 +54,18 @@ public class GlobalActionsImpl implements GlobalActions {
         mDeviceProvisionedController = Dependency.get(DeviceProvisionedController.class);
     }
 
+    // As day/night theming isn't fully implemented, we need to use a day/night themed context
+    private ContextThemeWrapper getThemedContext(Context context) {
+        ContextThemeWrapper themedContext =
+                new ContextThemeWrapper(context, com.android.internal.R.style.Theme_Material_DayNight);
+        return themedContext;
+    }
+
+
     @Override
     public void showGlobalActions(GlobalActionsManager manager) {
         if (mGlobalActions == null) {
-            mGlobalActions = new GlobalActionsDialog(mContext, manager);
+            mGlobalActions = new GlobalActionsDialog(getThemedContext(mContext), manager);
         }
         mGlobalActions.showDialog(mKeyguardMonitor.isShowing(),
                 mDeviceProvisionedController.isDeviceProvisioned());

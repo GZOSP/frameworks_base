@@ -60,14 +60,19 @@
     <string name="quick_settings_pip_label">PiP</string>
     <string name="quick_settings_pip_tile_app_na">App does not support PiP</string>
 
-     <!-- Sound QS Tile -->
-     <string name="quick_settings_sound_label">Sound</string>
-     <string name="quick_settings_sound_ring">Ring</string>
-     <string name="quick_settings_sound_vibrate">Vibrate</string>
-     <string name="quick_settings_sound_dnd">Do not disturb</string>
+    <!-- Sound QS Tile -->
+    <string name="quick_settings_sound_label">Sound</string>
+    <string name="quick_settings_sound_ring">Ring</string>
+    <string name="quick_settings_sound_vibrate">Vibrate</string>
+    <string name="quick_settings_sound_dnd">Do not disturb</string>
 
-     <!-- Volume QS Tile -->
-     <string name="accessibility_quick_settings_volume_panel">Volume</string>
-     <string name="quick_settings_volume_panel_label">Volume</string>
+    <!-- Volume QS Tile -->
+    <string name="accessibility_quick_settings_volume_panel">Volume</string>
+    <string name="quick_settings_volume_panel_label">Volume</string>
+
+    <string name="alert_on_charged_level">You can disconnect the charger ( ">"<xliff:g id="percentage">%s</xliff:g> )</string>
+    <string name="battery_level_good_title">Optimal battery level</string>
+    <string name="battery_level_good_sound" translatable="false">/system/media/audio/ui/GoodBattery.ogg</string>
+    <string name="notification_channel_charge_alert">Optimal battery charge level</string>
 
 </resources>

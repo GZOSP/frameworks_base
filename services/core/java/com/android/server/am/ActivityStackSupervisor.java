@@ -3157,6 +3157,9 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
             }
         }
         checkReadyForSleepLocked();
+        if (mGoingToSleep.isHeld()) {
+            mGoingToSleep.release();
+        }
     }
 
     boolean shutdownLocked(int timeout) {
@@ -3266,9 +3269,6 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
 
         removeSleepTimeouts();
 
-        if (mGoingToSleep.isHeld()) {
-            mGoingToSleep.release();
-        }
         if (mService.mShuttingDown) {
             mService.notifyAll();
         }

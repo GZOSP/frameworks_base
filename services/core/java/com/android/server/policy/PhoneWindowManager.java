@@ -450,7 +450,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public static final int TOAST_WINDOW_TIMEOUT = 3500; // 3.5 seconds
 
     private DeviceKeyHandler mDeviceKeyHandler;
-
+ 
     /**
      * Lock protecting internal state.  Must not call out into window
      * manager with lock held.  (This lock will be acquired in places
@@ -646,6 +646,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mHandleVolumeKeysInWM;
 
     int mDeviceHardwareKeys;
+    int mBackKillTimeout;
 
     int mPointerLocationMode = 0; // guarded by mLock
 
@@ -1180,6 +1181,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private SystemGesturesPointerEventListener mSystemGestures;
     private OPGesturesListener mOPGestures;
+    private ActionUtils mActionUtils;
 
     IStatusBarService getStatusBarService() {
         synchronized (mServiceAquireLock) {
@@ -2296,6 +2298,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mDeviceHardwareKeys = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
+
+        mBackKillTimeout = mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_backKillTimeout);
 
         readConfigurationDependentBehaviors();
 
@@ -3974,7 +3979,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 toggleRecentApps();
                 break;
             case KEY_ACTION_KILL_APP:
-                ActionUtils.killForegroundApp(mContext, mCurrentUserId);
+                mHandler.postDelayed(mKillApp, mBackKillTimeout);
                 break;
             case KEY_ACTION_SEARCH:
                 launchAssistAction(null, -1);
@@ -4229,6 +4234,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
             return -1;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && !down) {
+            mHandler.removeCallbacks(mKillApp);
         }
 
         // First we always handle the home key here, so applications
@@ -4520,6 +4529,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 launchAssistAction(Intent.EXTRA_ASSIST_INPUT_HINT_KEYBOARD, event.getDeviceId());
             }
             return -1;
+        } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (down && repeatCount == 0) {
+                    mHandler.postDelayed(mKillApp, mBackKillTimeout);
+            }
         }
 
         // Shortcuts are invoked through Search+key, so intercept those here

@@ -1181,7 +1181,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     private SystemGesturesPointerEventListener mSystemGestures;
     private OPGesturesListener mOPGestures;
-    private ActionUtils mActionUtils;
 
     IStatusBarService getStatusBarService() {
         synchronized (mServiceAquireLock) {

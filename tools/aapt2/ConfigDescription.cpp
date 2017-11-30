@@ -322,6 +322,31 @@ static bool parseUiModeNight(const char* name, ResTable_config* out) {
       out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
                     ResTable_config::UI_MODE_NIGHT_YES;
     return true;
+  } else if (strcmp(name, "tesla") == 0) {
+    if (out)
+      out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
+                    ResTable_config::UI_MODE_NIGHT_TESLA;
+    return true;
+  } else if (strcmp(name, "tipsy") == 0) {
+    if (out)
+      out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
+                    ResTable_config::UI_MODE_NIGHT_TIPSY;
+    return true;
+  } else if (strcmp(name, "validus") == 0) {
+    if (out)
+      out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
+                    ResTable_config::UI_MODE_NIGHT_VALIDUS;
+    return true;
+  } else if (strcmp(name, "retro") == 0) {
+    if (out)
+      out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
+                    ResTable_config::UI_MODE_NIGHT_RETRO;
+    return true;
+  } else if (strcmp(name, "mint") == 0) {
+    if (out)
+      out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |
+                    ResTable_config::UI_MODE_NIGHT_MINT;
+    return true;           
   } else if (strcmp(name, "notnight") == 0) {
     if (out)
       out->uiMode = (out->uiMode & ~ResTable_config::MASK_UI_MODE_NIGHT) |

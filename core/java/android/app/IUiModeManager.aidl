@@ -60,5 +60,5 @@ interface IUiModeManager {
     /**
      * Tells if Night mode is locked or not.
      */
-    boolean isNightModeLocked();
+    boolean isNightModeLocked();   
 }

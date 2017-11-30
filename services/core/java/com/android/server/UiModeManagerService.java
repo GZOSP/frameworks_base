@@ -87,7 +87,7 @@ final class UiModeManagerService extends SystemService {
     private boolean mTelevision;
     private boolean mWatch;
     private boolean mVrHeadset;
-    private boolean mComputedNightMode;
+    private boolean mComputedNightMode = true;
     private int mCarModeEnableFlags;
 
     // flag set by resource, whether to enable Car dock launch when starting car mode.
@@ -303,6 +303,11 @@ final class UiModeManagerService extends SystemService {
             switch (mode) {
                 case UiModeManager.MODE_NIGHT_NO:
                 case UiModeManager.MODE_NIGHT_YES:
+                case UiModeManager.MODE_NIGHT_TESLA:
+                case UiModeManager.MODE_NIGHT_TIPSY:
+                case UiModeManager.MODE_NIGHT_VALIDUS:
+                case UiModeManager.MODE_NIGHT_RETRO:
+                case UiModeManager.MODE_NIGHT_MINT:                                                                  
                 case UiModeManager.MODE_NIGHT_AUTO:
                     break;
                 default:

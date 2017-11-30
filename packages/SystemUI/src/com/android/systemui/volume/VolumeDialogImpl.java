@@ -404,7 +404,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         row.view.setTag(row);
         row.header = (TextView) row.view.findViewById(R.id.volume_row_header);
         row.header.setId(20 * row.stream);
-        row.slider = (SeekBar) row.view.findViewById(R.id.volume_row_slider);
+        row.slider = (SeekBar) row.view.findViewById(R.id.volume_row_slider);   
         row.slider.setOnSeekBarChangeListener(new VolumeSeekBarChangeListener(row));
         row.anim = null;
 

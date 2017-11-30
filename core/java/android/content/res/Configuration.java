@@ -642,7 +642,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int UI_MODE_TYPE_VR_HEADSET = 0x07;
 
     /** Constant for {@link #uiMode}: bits that encode the night mode. */
-    public static final int UI_MODE_NIGHT_MASK = 0x30;
+    public static final int UI_MODE_NIGHT_MASK = 0xf0;
     /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
      * value indicating that no mode type has been set. */
     public static final int UI_MODE_NIGHT_UNDEFINED = 0x00;
@@ -656,7 +656,21 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * <a href="{@docRoot}guide/topics/resources/providing-resources.html#NightQualifier">night</a>
      * resource qualifier. */
     public static final int UI_MODE_NIGHT_YES = 0x20;
-
+    /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
+     * value that corresponds to the NightQualifier "tesla". */
+    public static final int UI_MODE_NIGHT_TESLA = 0x30;
+    /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
+     * value that corresponds to the NightQualifier "tipsy". */
+    public static final int UI_MODE_NIGHT_TIPSY = 0x40;
+    /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
+     * value that corresponds to the NightQualifier "validus". */
+    public static final int UI_MODE_NIGHT_VALIDUS = 0x50;
+    /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
+     * value that corresponds to the NightQualifier "retro". */
+    public static final int UI_MODE_NIGHT_RETRO = 0x60;
+    /** Constant for {@link #uiMode}: a {@link #UI_MODE_NIGHT_MASK}
+     * value that corresponds to the NightQualifier "mint. */
+    public static final int UI_MODE_NIGHT_MINT = 0x70;    
     /**
      * Bit mask of the ui mode.  Currently there are two fields:
      * <p>The {@link #UI_MODE_TYPE_MASK} bits define the overall ui mode of the
@@ -1005,6 +1019,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             case UI_MODE_NIGHT_UNDEFINED: sb.append(" ?night"); break;
             case UI_MODE_NIGHT_NO: /* not-night is not interesting to print */ break;
             case UI_MODE_NIGHT_YES: sb.append(" night"); break;
+            case UI_MODE_NIGHT_TESLA: sb.append(" tesla"); break;
+            case UI_MODE_NIGHT_TIPSY: sb.append(" tipsy"); break;
+            case UI_MODE_NIGHT_VALIDUS: sb.append(" validus"); break;
+            case UI_MODE_NIGHT_RETRO: sb.append(" retro"); break;
+            case UI_MODE_NIGHT_MINT: sb.append(" mint"); break;                          
             default: sb.append(" night="); sb.append(uiMode&UI_MODE_NIGHT_MASK); break;
         }
         switch (touchscreen) {
@@ -1110,7 +1129,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      *
      * @return a bit mask of the changed fields, as per {@link #diff}
      */
-    public @Config int updateFrom(@NonNull Configuration delta) {
+    public int updateFrom(Configuration delta) {
         int changed = 0;
         if (delta.fontScale > 0 && fontScale != delta.fontScale) {
             changed |= ActivityInfo.CONFIG_FONT_SCALE;
@@ -1445,8 +1464,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @return {@code true} if the resource needs to be loaded, {@code false}
      *         otherwise
      */
-    public static boolean needNewResources(@Config int configChanges,
-            @Config int interestingChanges) {
+    public static boolean needNewResources(int configChanges, int interestingChanges) {
         // CONFIG_ASSETS_PATHS and CONFIG_FONT_SCALE are higher level configuration changes that
         // all resources are subject to change with.
         interestingChanges = interestingChanges | ActivityInfo.CONFIG_ASSETS_PATHS
@@ -2027,6 +2045,21 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             case Configuration.UI_MODE_NIGHT_YES:
                 parts.add("night");
                 break;
+            case Configuration.UI_MODE_NIGHT_TESLA:
+                parts.add("tesla");
+                break;
+            case Configuration.UI_MODE_NIGHT_TIPSY:
+                parts.add("tipsy");
+                break;
+            case Configuration.UI_MODE_NIGHT_VALIDUS:
+                parts.add("validus");
+                break;
+            case Configuration.UI_MODE_NIGHT_RETRO:
+                parts.add("retro");
+                break;
+            case Configuration.UI_MODE_NIGHT_MINT:
+                parts.add("mint");
+                break;                                             
             case Configuration.UI_MODE_NIGHT_NO:
                 parts.add("notnight");
                 break;

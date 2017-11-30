@@ -787,6 +787,11 @@
              0 - MODE_NIGHT_AUTO
              1 - MODE_NIGHT_NO
              2 - MODE_NIGHT_YES
+             3 - MODE_NIGHT_TESLA
+             4 - MODE_NIGHT_TIPSY
+             5 - MODE_NIGHT_VALIDUS
+             6 - MODE_NIGHT_RETRO
+             7 - MODE_NIGHT_MINT                             
     -->
     <integer name="config_defaultNightMode">1</integer>
 

@@ -98,7 +98,14 @@ public class UiModeManager {
     public static String ACTION_EXIT_DESK_MODE = "android.app.action.EXIT_DESK_MODE";
 
     /** @hide */
-    @IntDef({MODE_NIGHT_AUTO, MODE_NIGHT_NO, MODE_NIGHT_YES})
+    @IntDef({MODE_NIGHT_AUTO,
+             MODE_NIGHT_NO,
+             MODE_NIGHT_YES,
+             MODE_NIGHT_TESLA,
+             MODE_NIGHT_TIPSY,
+             MODE_NIGHT_VALIDUS,
+             MODE_NIGHT_RETRO,
+             MODE_NIGHT_MINT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NightMode {}
 
@@ -119,6 +126,36 @@ public class UiModeManager {
      * always run in night mode.
      */
     public static final int MODE_NIGHT_YES = Configuration.UI_MODE_NIGHT_YES >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in night mode (Theme.Material (DarkKat version)).
+     */
+    public static final int MODE_NIGHT_TESLA = Configuration.UI_MODE_NIGHT_TESLA >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (Theme.Material.Light (Whiteout-DarkKat version)).
+     */
+    public static final int MODE_NIGHT_TIPSY = Configuration.UI_MODE_NIGHT_TIPSY >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (Theme.Material.Light (DarkKat version)).
+     */
+    public static final int MODE_NIGHT_VALIDUS = Configuration.UI_MODE_NIGHT_VALIDUS >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (Theme.Material.Light (Whiteout-DarkKat version)).
+     */
+    public static final int MODE_NIGHT_RETRO = Configuration.UI_MODE_NIGHT_RETRO >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (Theme.Material.Light (DarkKat version)).
+     */
+    public static final int MODE_NIGHT_MINT = Configuration.UI_MODE_NIGHT_MINT >> 4;
 
     private IUiModeManager mService;
 

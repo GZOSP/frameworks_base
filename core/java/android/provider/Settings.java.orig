@@ -4092,9 +4092,22 @@ public final class Settings {
         /** @hide */
         private static final Validator SHOW_BATTERY_PERCENT_VALIDATOR = BOOLEAN_VALIDATOR;
 
+<<<<<<< HEAD
+=======
+
         /*****************************
-         * GZOSP System Settings start
+         * AICP System Settings start
          *****************************/
+
+
+        /**
+         * Theme of AicpExtras.
+         * @hide
+         */
+        public static final String AE_THEME = "ae_theme";
+
+        /** @hide */
+        private static final Validator AE_THEME_VALIDATOR = ANY_INTEGER_VALIDATOR;
 
         /**
          * Custom button brightness value for manual mode
@@ -4145,9 +4158,11 @@ public final class Settings {
 
 
         /***************************
-         * GZOSP System Settings end
+         * AICP System Settings end
          ***************************/
 
+
+>>>>>>> 2d24916... fw_base: Custom button light [1/2]
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -4219,12 +4234,18 @@ public final class Settings {
             SHOW_BATTERY_PERCENT,
             NOTIFICATION_VIBRATION_INTENSITY,
             HAPTIC_FEEDBACK_INTENSITY,
+<<<<<<< HEAD
             DISPLAY_COLOR_MODE
+=======
+            DISPLAY_COLOR_MODE,
+            // AICP Settings
+            AE_THEME,
             CUSTOM_BUTTON_BRIGHTNESS,
             CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS,
             BUTTON_BACKLIGHT_ENABLE,
             BUTTON_BACKLIGHT_TIMEOUT,
             BUTTON_BACKLIGHT_ON_TOUCH_ONLY
+>>>>>>> 2d24916... fw_base: Custom button light [1/2]
         };
 
         /**
@@ -4339,11 +4360,16 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+<<<<<<< HEAD
+=======
+            // AICP Settings
+            PRIVATE_SETTINGS.add(AE_THEME);
             PRIVATE_SETTINGS.add(CUSTOM_BUTTON_BRIGHTNESS);
             PRIVATE_SETTINGS.add(CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ENABLE);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_TIMEOUT);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ON_TOUCH_ONLY);
+>>>>>>> 2d24916... fw_base: Custom button light [1/2]
         }
 
         /**
@@ -4432,12 +4458,16 @@ public final class Settings {
             VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
             VALIDATORS.put(SHOW_BATTERY_PERCENT, SHOW_BATTERY_PERCENT_VALIDATOR);
+<<<<<<< HEAD
+=======
+            VALIDATORS.put(AE_THEME, AE_THEME_VALIDATOR);
             VALIDATORS.put(CUSTOM_BUTTON_BRIGHTNESS, CUSTOM_BUTTON_BRIGHTNESS_VALIDATOR);
             VALIDATORS.put(CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS,
                     CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS_VALIDATOR);
             VALIDATORS.put(BUTTON_BACKLIGHT_ENABLE, BUTTON_BACKLIGHT_ENABLE_VALIDATOR);
             VALIDATORS.put(BUTTON_BACKLIGHT_TIMEOUT, BUTTON_BACKLIGHT_TIMEOUT_VALIDATOR);
             VALIDATORS.put(BUTTON_BACKLIGHT_ON_TOUCH_ONLY, BUTTON_BACKLIGHT_ON_TOUCH_ONLY_VALIDATOR);
+>>>>>>> 2d24916... fw_base: Custom button light [1/2]
         }
 
         /**

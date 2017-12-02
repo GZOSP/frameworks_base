@@ -4092,6 +4092,62 @@ public final class Settings {
         /** @hide */
         private static final Validator SHOW_BATTERY_PERCENT_VALIDATOR = BOOLEAN_VALIDATOR;
 
+        /*****************************
+         * GZOSP System Settings start
+         *****************************/
+
+        /**
+         * Custom button brightness value for manual mode
+         *
+         * @hide
+         */
+        public static final String CUSTOM_BUTTON_BRIGHTNESS = "custom_button_brightness";
+
+        /** @hide */
+        private static final Validator CUSTOM_BUTTON_BRIGHTNESS_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
+        /**
+         * use same value for buttons as for screen (manual and auto mode)
+         *
+         * @hide
+         */
+        public static final String CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS = "custom_button_use_screen_brightness";
+
+        /** @hide */
+        private static final Validator CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
+         * disable all button brightness (manual and auto mode)
+         *
+         * @hide
+         */
+        public static final String BUTTON_BACKLIGHT_ENABLE = "button_backlight_enable";
+
+        /** @hide */
+        private static final Validator BUTTON_BACKLIGHT_ENABLE_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
+         * Timeout value for button lights. 0 = disabled
+         * @hide
+         */
+        public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
+
+        /** @hide */
+        private static final Validator BUTTON_BACKLIGHT_TIMEOUT_VALIDATOR = ANY_INTEGER_VALIDATOR;
+
+        /**
+         * @hide
+         */
+        public static final String BUTTON_BACKLIGHT_ON_TOUCH_ONLY = "button_backlight_on_touch_only";
+
+        /** @hide */
+        private static final Validator BUTTON_BACKLIGHT_ON_TOUCH_ONLY_VALIDATOR = BOOLEAN_VALIDATOR;
+
+
+        /***************************
+         * GZOSP System Settings end
+         ***************************/
+
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -4164,6 +4220,11 @@ public final class Settings {
             NOTIFICATION_VIBRATION_INTENSITY,
             HAPTIC_FEEDBACK_INTENSITY,
             DISPLAY_COLOR_MODE
+            CUSTOM_BUTTON_BRIGHTNESS,
+            CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS,
+            BUTTON_BACKLIGHT_ENABLE,
+            BUTTON_BACKLIGHT_TIMEOUT,
+            BUTTON_BACKLIGHT_ON_TOUCH_ONLY
         };
 
         /**
@@ -4278,6 +4339,11 @@ public final class Settings {
             PRIVATE_SETTINGS.add(EGG_MODE);
             PRIVATE_SETTINGS.add(SHOW_BATTERY_PERCENT);
             PRIVATE_SETTINGS.add(DISPLAY_COLOR_MODE);
+            PRIVATE_SETTINGS.add(CUSTOM_BUTTON_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ENABLE);
+            PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_TIMEOUT);
+            PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ON_TOUCH_ONLY);
         }
 
         /**
@@ -4366,6 +4432,12 @@ public final class Settings {
             VALIDATORS.put(WIFI_STATIC_DNS1, WIFI_STATIC_DNS1_VALIDATOR);
             VALIDATORS.put(WIFI_STATIC_DNS2, WIFI_STATIC_DNS2_VALIDATOR);
             VALIDATORS.put(SHOW_BATTERY_PERCENT, SHOW_BATTERY_PERCENT_VALIDATOR);
+            VALIDATORS.put(CUSTOM_BUTTON_BRIGHTNESS, CUSTOM_BUTTON_BRIGHTNESS_VALIDATOR);
+            VALIDATORS.put(CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS,
+                    CUSTOM_BUTTON_USE_SCREEN_BRIGHTNESS_VALIDATOR);
+            VALIDATORS.put(BUTTON_BACKLIGHT_ENABLE, BUTTON_BACKLIGHT_ENABLE_VALIDATOR);
+            VALIDATORS.put(BUTTON_BACKLIGHT_TIMEOUT, BUTTON_BACKLIGHT_TIMEOUT_VALIDATOR);
+            VALIDATORS.put(BUTTON_BACKLIGHT_ON_TOUCH_ONLY, BUTTON_BACKLIGHT_ON_TOUCH_ONLY_VALIDATOR);
         }
 
         /**

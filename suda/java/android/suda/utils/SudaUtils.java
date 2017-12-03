@@ -42,18 +42,22 @@ public class SudaUtils {
         System.loadLibrary(LIBNAME);
     }
 
-    //2017年法定节假日
-    private static int YEAR = 2017;
+    //2018年法定节假日
+    private static int YEAR = 2018;
     //一月
-    private static int[] JANH = {1, 2, 27, 28, 29, 30, 31};
+    private static int[] JANH = {1};
     //二月
-    private static int[] FEBH = {1, 2};
+    private static int[] FEBH = {15, 16, 17, 18, 19, 20, 21};
     //四月
-    private static int[] APRH = {2, 3, 4, 29, 30};
+    private static int[] APRH = {5, 6, 7, 29, 30};
     //五月
-    private static int[] MAYH = {1, 28, 29, 30};
+    private static int[] MAYH = {1};
+    //六月
+    private static int[] JUNH = {16, 17, 18};
+    //九月
+    private static int[] SEPH = {22, 23, 24};
     //十月
-    private static int[] OCTH = {1, 2, 3, 4, 5, 6, 7, 8};
+    private static int[] OCTH = {1, 2, 3, 4, 5, 6, 7};
 
     public static native boolean isSupportLanguage(boolean excludeTW);
 
@@ -124,12 +128,18 @@ public class SudaUtils {
                   }
                 break;
                 case 6:
+                  for(int tmp:JUNH){
+                      if(d == tmp) bResult=true;
+                  }
                 break;
                 case 7:
                 break;
                 case 8:
                 break;
                 case 9:
+                  for(int tmp:SEPH){
+                      if(d == tmp) bResult=true;
+                  }
                 break;
                 case 10:
                   for(int tmp:OCTH){

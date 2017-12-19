@@ -32,6 +32,9 @@ import com.android.systemui.R;
 
 import java.util.Date;
 import java.util.Locale;
+import java.util.Calendar;
+import android.suda.lunar.Lunar;
+import android.suda.utils.SudaUtils;
 
 public class DateView extends TextView {
     private static final String TAG = "DateView";
@@ -41,11 +44,18 @@ public class DateView extends TextView {
     private DateFormat mDateFormat;
     private String mLastText;
     private String mDatePattern;
+    private boolean mScreenOn = true;
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+            }
+
             if (Intent.ACTION_TIME_TICK.equals(action)
                     || Intent.ACTION_TIME_CHANGED.equals(action)
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)
@@ -55,7 +65,9 @@ public class DateView extends TextView {
                     // need to get a fresh date format
                     getHandler().post(() -> mDateFormat = null);
                 }
-                getHandler().post(() -> updateClock());
+                if (mScreenOn) {
+                    getHandler().post(() -> updateClock());
+                }
             }
         }
     };
@@ -82,6 +94,8 @@ public class DateView extends TextView {
         super.onAttachedToWindow();
 
         IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
@@ -108,9 +122,17 @@ public class DateView extends TextView {
             mDateFormat = format;
         }
 
+	    String zhDate = "";
+	    if (SudaUtils.isSupportLanguage(true)) {
+                Calendar cal = Calendar.getInstance();
+	        cal.setTime(mCurrentTime);
+                Lunar lunar = new Lunar(cal);
+                zhDate = " " + lunar.toShortenSrting();
+	    }
+
         mCurrentTime.setTime(System.currentTimeMillis());
 
-        final String text = mDateFormat.format(mCurrentTime);
+        final String text = mDateFormat.format(mCurrentTime) + zhDate;
         if (!text.equals(mLastText)) {
             setText(text);
             mLastText = text;

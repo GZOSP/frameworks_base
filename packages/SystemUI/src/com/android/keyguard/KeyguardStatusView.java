@@ -59,11 +59,18 @@ public class KeyguardStatusView extends GridLayout {
     private boolean mPulsing;
     private boolean mDark;
 
+    //On the first boot, keyguard will start to receiver TIME_TICK intent.
+    //And onScreenTurnedOff will not get called if power off when keyguard is not started.
+    //Set initial value to false to skip the above case.
+    private boolean enableRefresh = false;
+
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
         public void onTimeChanged() {
-            refresh();
+            if (enableRefresh) {
+                refresh();
+            }
         }
 
         @Override
@@ -78,11 +85,14 @@ public class KeyguardStatusView extends GridLayout {
         @Override
         public void onStartedWakingUp() {
             setEnableMarquee(true);
+            enableRefresh = true;
+            refresh();
         }
 
         @Override
         public void onFinishedGoingToSleep(int why) {
             setEnableMarquee(false);
+            enableRefresh = false;
         }
 
         @Override
@@ -262,10 +272,12 @@ public class KeyguardStatusView extends GridLayout {
             if (key.equals(cacheKey)) return;
 
             clockView12 = DateFormat.getBestDateTimePattern(locale, clockView12Skel);
-            // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
-            // format.  The following code removes the AM/PM indicator if we didn't want it.
-            if (!clockView12Skel.contains("a")) {
-                clockView12 = clockView12.replaceAll("a", "").trim();
+            if(!context.getResources().getBoolean(R.bool.config_showAmpm)){
+                // CLDR insists on adding an AM/PM indicator even though it wasn't in the skeleton
+                // format.  The following code removes the AM/PM indicator if we didn't want it.
+                if (!clockView12Skel.contains("a")) {
+                    clockView12 = clockView12.replaceAll("a", "").trim();
+                }
             }
 
             clockView24 = DateFormat.getBestDateTimePattern(locale, clockView24Skel);

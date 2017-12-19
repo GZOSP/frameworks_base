@@ -98,6 +98,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PackageManagerInternal;
 import android.content.pm.ParceledListSlice;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.StringParceledListSlice;
@@ -151,6 +152,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
+import android.util.EventLog;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Slog;
@@ -5866,20 +5868,24 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
         enforceFullCrossUsersPermission(userHandle);
 
-        // It's not critical here, but let's make sure the package name is correct, in case
-        // we start using it for different purposes.
-        ensureCallerPackage(callerPackage);
-
-        final ApplicationInfo ai;
-        try {
-            ai = mIPackageManager.getApplicationInfo(callerPackage, 0, userHandle);
-        } catch (RemoteException e) {
-            throw new SecurityException(e);
-        }
-
         boolean legacyApp = false;
-        if (ai.targetSdkVersion <= Build.VERSION_CODES.M) {
-            legacyApp = true;
+        // callerPackage can only be null if we were called from within the system,
+        // which means that we are not a legacy app.
+        if (callerPackage != null) {
+            // It's not critical here, but let's make sure the package name is correct, in case
+            // we start using it for different purposes.
+            ensureCallerPackage(callerPackage);
+
+            final ApplicationInfo ai;
+            try {
+                ai = mIPackageManager.getApplicationInfo(callerPackage, 0, userHandle);
+            } catch (RemoteException e) {
+                throw new SecurityException(e);
+            }
+
+            if (ai.targetSdkVersion <= Build.VERSION_CODES.M) {
+                legacyApp = true;
+            }
         }
 
         final int rawStatus = getEncryptionStatus();
@@ -9543,6 +9549,10 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                         < android.os.Build.VERSION_CODES.M) {
                     return false;
                 }
+                if (!isRuntimePermission(permission)) {
+                    EventLog.writeEvent(0x534e4554, "62623498", user.getIdentifier(), "");
+                    return false;
+                }
                 final PackageManager packageManager = mInjector.getPackageManager();
                 switch (grantState) {
                     case DevicePolicyManager.PERMISSION_GRANT_STATE_GRANTED: {
@@ -9568,6 +9578,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 }
                 return true;
             } catch (SecurityException se) {
+                return false;
+            } catch (NameNotFoundException e) {
                 return false;
             } finally {
                 mInjector.binderRestoreCallingIdentity(ident);
@@ -9616,6 +9628,13 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         } catch (RemoteException re) {
             throw new RuntimeException("Package manager has died", re);
         }
+    }
+
+    public boolean isRuntimePermission(String permissionName) throws NameNotFoundException {
+        final PackageManager packageManager = mInjector.getPackageManager();
+        PermissionInfo permissionInfo = packageManager.getPermissionInfo(permissionName, 0);
+        return (permissionInfo.protectionLevel & PermissionInfo.PROTECTION_MASK_BASE)
+                == PermissionInfo.PROTECTION_DANGEROUS;
     }
 
     @Override

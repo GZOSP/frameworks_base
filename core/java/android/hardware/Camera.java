@@ -41,6 +41,7 @@ import android.util.Log;
 import android.text.TextUtils;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.os.SystemProperties;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -506,8 +507,21 @@ public class Camera {
             mEventHandler = null;
         }
 
-        return native_setup(new WeakReference<Camera>(this), cameraId, halVersion,
-                ActivityThread.currentOpPackageName());
+        String packageName = ActivityThread.currentOpPackageName();
+
+        //Force HAL1 if the package name falls in this bucket
+        String packageList = SystemProperties.get("camera.hal1.packagelist", "");
+        if (packageList.length() > 0) {
+            TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(',');
+            splitter.setString(packageList);
+            for (String str : splitter) {
+                if (packageName.equals(str)) {
+                    halVersion = CAMERA_HAL_API_VERSION_1_0;
+                    break;
+                }
+            }
+        }
+        return native_setup(new WeakReference<Camera>(this), cameraId, halVersion, packageName);
     }
 
     private int cameraInitNormal(int cameraId) {
@@ -810,6 +824,7 @@ public class Camera {
      * @see android.media.MediaActionSound
      */
     public final void setPreviewCallback(PreviewCallback cb) {
+        android.util.SeempLog.record(66);
         mPreviewCallback = cb;
         mOneShot = false;
         mWithBuffer = false;
@@ -836,6 +851,7 @@ public class Camera {
      * @see android.media.MediaActionSound
      */
     public final void setOneShotPreviewCallback(PreviewCallback cb) {
+        android.util.SeempLog.record(68);
         mPreviewCallback = cb;
         mOneShot = true;
         mWithBuffer = false;
@@ -874,6 +890,7 @@ public class Camera {
      * @see android.media.MediaActionSound
      */
     public final void setPreviewCallbackWithBuffer(PreviewCallback cb) {
+        android.util.SeempLog.record(67);
         mPreviewCallback = cb;
         mOneShot = false;
         mWithBuffer = true;
@@ -1436,6 +1453,7 @@ public class Camera {
      */
     public final void takePicture(ShutterCallback shutter, PictureCallback raw,
             PictureCallback jpeg) {
+        android.util.SeempLog.record(65);
         takePicture(shutter, raw, null, jpeg);
     }
     private native final void native_takePicture(int msgType);
@@ -1471,6 +1489,7 @@ public class Camera {
      */
     public final void takePicture(ShutterCallback shutter, PictureCallback raw,
             PictureCallback postview, PictureCallback jpeg) {
+        android.util.SeempLog.record(65);
         mShutterCallback = shutter;
         mRawImageCallback = raw;
         mPostviewCallback = postview;
@@ -1643,6 +1662,20 @@ public class Camera {
     }
 
     private native final boolean _enableShutterSound(boolean enabled);
+
+    /**
+     * Send a vendor-specific camera command
+     *
+     * @hide
+     */
+    public final void sendVendorCommand(int cmd, int arg1, int arg2) {
+        if (cmd < 1000) {
+            throw new IllegalArgumentException("Command numbers must be at least 1000");
+        }
+        _sendVendorCommand(cmd, arg1, arg2);
+    }
+
+    private native final void _sendVendorCommand(int cmd, int arg1, int arg2);
 
     /**
      * Callback interface for zoom changes during a smooth zoom operation.
@@ -4362,6 +4395,7 @@ public class Camera {
             splitter.setString(str);
             int index = 0;
             for (String s : splitter) {
+                s = s.replaceAll("\\s","");
                 output[index++] = Integer.parseInt(s);
             }
         }
@@ -4432,7 +4466,7 @@ public class Camera {
         // Example string: "(10000,26623),(10000,30000)". Return null if the
         // passing string is null or the size is 0.
         private ArrayList<int[]> splitRange(String str) {
-            if (str == null || str.charAt(0) != '('
+            if (TextUtils.isEmpty(str) || str.charAt(0) != '('
                     || str.charAt(str.length() - 1) != ')') {
                 Log.e(TAG, "Invalid range list string=" + str);
                 return null;
@@ -4457,7 +4491,7 @@ public class Camera {
         // Example string: "(-10,-10,0,0,300),(0,0,10,10,700)". Return null if
         // the passing string is null or the size is 0 or (0,0,0,0,0).
         private ArrayList<Area> splitArea(String str) {
-            if (str == null || str.charAt(0) != '('
+            if (TextUtils.isEmpty(str) || str.charAt(0) != '('
                     || str.charAt(str.length() - 1) != ')') {
                 Log.e(TAG, "Invalid area string=" + str);
                 return null;

@@ -53,11 +53,14 @@ import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +76,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -126,6 +130,9 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
     private final boolean mShowSilentToggle;
     private final EmergencyAffordanceManager mEmergencyAffordanceManager;
 
+    private BitSet mAirplaneModeBits;
+    private final List<PhoneStateListener> mPhoneStateListeners = new ArrayList<>();
+
     /**
      * @param context everything needs a context :(
      */
@@ -148,9 +155,15 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         mHasTelephony = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
 
         // get notified of phone state changes
-        TelephonyManager telephonyManager =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+        SubscriptionManager.from(mContext).addOnSubscriptionsChangedListener(
+                new SubscriptionManager.OnSubscriptionsChangedListener() {
+            @Override
+            public void onSubscriptionsChanged() {
+                super.onSubscriptionsChanged();
+                setupAirplaneModeListeners();
+            }
+        });
+        setupAirplaneModeListeners();
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON), true,
                 mAirplaneModeObserver);
@@ -161,6 +174,66 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 R.bool.config_useFixedVolume);
 
         mEmergencyAffordanceManager = new EmergencyAffordanceManager(context);
+    }
+
+    /**
+     * Since there are two ways of handling airplane mode (with telephony, we depend on the internal
+     * device telephony state), and MSIM devices do not report phone state for missing SIMs, we
+     * need to dynamically setup listeners based on subscription changes.
+     *
+     * So if there is _any_ active SIM in the device, we can depend on the phone state,
+     * otherwise fall back to {@link Settings.Global#AIRPLANE_MODE_ON}.
+     */
+    private void setupAirplaneModeListeners() {
+        TelephonyManager telephonyManager =
+                (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+
+        for (PhoneStateListener listener : mPhoneStateListeners) {
+            telephonyManager.listen(listener, PhoneStateListener.LISTEN_NONE);
+        }
+        mPhoneStateListeners.clear();
+
+        final List<SubscriptionInfo> subInfoList = SubscriptionManager.from(mContext)
+                .getActiveSubscriptionInfoList();
+        if (subInfoList != null) {
+            mHasTelephony = true;
+            mAirplaneModeBits = new BitSet(subInfoList.size());
+            for (int i = 0; i < subInfoList.size(); i++) {
+                final int finalI = i;
+                PhoneStateListener subListener = new PhoneStateListener(subInfoList.get(finalI)
+                        .getSubscriptionId()) {
+                    @Override
+                    public void onServiceStateChanged(ServiceState serviceState) {
+                        final boolean inAirplaneMode = serviceState.getState()
+                                == ServiceState.STATE_POWER_OFF;
+                        mAirplaneModeBits.set(finalI, inAirplaneMode);
+
+                        // we're in airplane mode if _any_ of the subscriptions say we are
+                        mAirplaneState = mAirplaneModeBits.cardinality() > 0
+                                ? ToggleAction.State.On : ToggleAction.State.Off;
+
+                        mAirplaneModeOn.updateState(mAirplaneState);
+                        if (mAdapter != null) {
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                };
+                mPhoneStateListeners.add(subListener);
+                telephonyManager.listen(subListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+            }
+        } else {
+            mHasTelephony = false;
+        }
+
+        // Set the initial status of airplane mode toggle
+        mAirplaneState = getUpdatedAirplaneToggleState();
+    }
+
+    // As day/night theming isn't fully implemented, we need to use a day/night themed context
+    private ContextThemeWrapper getThemedContext(Context context) {
+        ContextThemeWrapper themedContext =
+                new ContextThemeWrapper(context, com.android.internal.R.style.Theme_Material_DayNight);
+        return themedContext;
     }
 
     /**
@@ -221,7 +294,8 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         if (!mHasVibrator) {
             mSilentModeAction = new SilentModeToggleAction();
         } else {
-            mSilentModeAction = new SilentModeTriStateAction(mContext, mAudioManager, mHandler);
+            mSilentModeAction = new SilentModeTriStateAction(getThemedContext(mContext),
+                    mAudioManager, mHandler);
         }
         mAirplaneModeOn = new ToggleAction(
                 R.drawable.ic_lock_airplane_mode,
@@ -269,9 +343,13 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         mRestartAdvancedAction = new ToggleRestartAdvancedAction(
                 com.android.systemui.R.drawable.ic_restart_advanced,
                 com.android.systemui.R.drawable.ic_restart_advanced,
+                com.android.systemui.R.drawable.ic_restart_advanced,
+                com.android.systemui.R.drawable.ic_restart_advanced,
                 com.android.systemui.R.string.global_action_restart_advanced,
                 com.android.systemui.R.string.global_action_restart_recovery,
                 com.android.systemui.R.string.global_action_restart_bootloader,
+                com.android.systemui.R.string.global_action_restart_soft,
+                com.android.systemui.R.string.global_action_restart_systemui,
                 mWindowManagerFuncs, mHandler) {
 
             public boolean showDuringKeyguard() {
@@ -336,12 +414,12 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
         mAdapter = new MyAdapter();
 
-        AlertParams params = new AlertParams(mContext);
+        AlertParams params = new AlertParams(getThemedContext(mContext));
         params.mAdapter = mAdapter;
         params.mOnClickListener = this;
         params.mForceInverseBackground = true;
 
-        ActionsDialog dialog = new ActionsDialog(mContext, params);
+        ActionsDialog dialog = new ActionsDialog(getThemedContext(mContext), params);
         dialog.setCanceledOnTouchOutside(false); // Handled by the custom class.
 
         dialog.getListView().setItemsCanFocus(true);
@@ -766,7 +844,8 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
         public View getView(int position, View convertView, ViewGroup parent) {
             Action action = getItem(position);
-            return action.create(mContext, convertView, parent, LayoutInflater.from(mContext));
+            return action.create(getThemedContext(mContext), convertView, parent,
+                    LayoutInflater.from(getThemedContext(mContext)));
         }
     }
 
@@ -1023,31 +1102,45 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
 
         enum State {
             Recovery,
-            Bootloader;
+            Bootloader,
+            SoftReboot,
+            SystemUI;
         }
 
         protected State mState = State.Recovery;
 
         protected int mRecoveryIconResid;
         protected int mBootloaderIconResid;
+        protected int mSoftRebootIconResid;
+        protected int mSystemUIIconResid;
         protected int mMessageResId;
         protected int mRecoveryMessageResId;
         protected int mBootloaderMessageResId;
+        protected int mSoftRebootMessageResId;
+        protected int mSystemUIMessageResId;
         protected GlobalActionsManager mWmFuncs;
         protected Handler mRefresh;
 
         public ToggleRestartAdvancedAction(int recoveryIconResid,
                 int bootloaderIconResid,
+                int softRebootIconResid,
+                int systemuiIconResid,
                 int message,
                 int recoveryMessageResId,
                 int bootloaderMessageResId,
+                int softRebootMessageResId,
+                int systemuiMessageResId,
                 GlobalActionsManager funcs,
                 Handler handler) {
             mRecoveryIconResid = recoveryIconResid;
             mBootloaderIconResid = bootloaderIconResid;
+            mSoftRebootIconResid = softRebootIconResid;
+            mSystemUIIconResid = systemuiIconResid;
             mMessageResId = message;
             mRecoveryMessageResId = recoveryMessageResId;
             mBootloaderMessageResId = bootloaderMessageResId;
+            mSoftRebootMessageResId = softRebootMessageResId;
+            mSystemUIMessageResId = systemuiMessageResId;
             mWmFuncs = funcs;
             mRefresh = handler;
         }
@@ -1073,18 +1166,55 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                 messageView.setText(mMessageResId);
             }
 
-            boolean bootloader = (mState == State.Bootloader);
-            if (icon != null) {
-                icon.setImageDrawable(context.getDrawable(
-                        (bootloader ? mBootloaderIconResid : mRecoveryIconResid)));
+            switch (mState) {
+            case Recovery:
+                 if (icon != null) {
+                     icon.setImageDrawable(context.getDrawable(mRecoveryIconResid));
+                 }
+                 if (statusView != null) {
+                     statusView.setText(mRecoveryMessageResId);
+                     statusView.setVisibility(View.VISIBLE);
+                 }
+                 break;
+            case Bootloader:
+                 if (icon != null) {
+                     icon.setImageDrawable(context.getDrawable(mBootloaderIconResid));
+                 }
+                 if (statusView != null) {
+                     statusView.setText(mBootloaderMessageResId);
+                     statusView.setVisibility(View.VISIBLE);
+                 }
+                 break;
+            case SoftReboot:
+                 if (icon != null) {
+                     icon.setImageDrawable(context.getDrawable(mSoftRebootIconResid));
+                 }
+                 if (statusView != null) {
+                     statusView.setText(mSoftRebootMessageResId);
+                     statusView.setVisibility(View.VISIBLE);
+                 }
+                 break;
+            case SystemUI:
+                 if (icon != null) {
+                     icon.setImageDrawable(context.getDrawable(mSystemUIIconResid));
+                 }
+                 if (statusView != null) {
+                     statusView.setText(mSystemUIMessageResId);
+                     statusView.setVisibility(View.VISIBLE);
+                 }
+                 break;
+            default:
+                 if (icon != null) {
+                     icon.setImageDrawable(context.getDrawable(mRecoveryIconResid));
+                 }
+                 if (statusView != null) {
+                     statusView.setText(mRecoveryMessageResId);
+                     statusView.setVisibility(View.VISIBLE);
+                 }
+                 break;
             }
 
-            if (statusView != null) {
-                statusView.setText(bootloader ? mBootloaderMessageResId : mRecoveryMessageResId);
-                statusView.setVisibility(View.VISIBLE);
-            }
-
-            return v;
+                 return v;
         }
 
         public void onClick(View v) {
@@ -1092,19 +1222,45 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         }
 
         public final void onPress() {
-            if (mState == State.Recovery) {
-                mState = State.Bootloader;
-            } else {
-                mState = State.Recovery;
+            switch (mState) {
+            case Recovery:
+                 mState = State.Bootloader;
+                 break;
+            case Bootloader:
+                 mState = State.SoftReboot;
+                 break;
+            case SoftReboot:
+                 mState = State.SystemUI;
+                 break;
+            case SystemUI:
+                 mState = State.Recovery;
+                 break;
+            default:
+                 mState = State.Recovery;
+                 break;
             }
+
             mRefresh.sendEmptyMessage(MESSAGE_REFRESH_ADVANCED_REBOOT);
         }
 
         public boolean onLongClick (View v) {
             mRefresh.sendEmptyMessage(MESSAGE_DISMISS);
             boolean bootloader = (mState == State.Bootloader);
-            mWmFuncs.advancedReboot(bootloader ? PowerManager.REBOOT_BOOTLOADER
-                    : PowerManager.REBOOT_RECOVERY);
+            switch (mState) {
+            case Recovery:
+                 mWmFuncs.advancedReboot(PowerManager.REBOOT_RECOVERY);
+                 break;
+            case Bootloader:
+                 mWmFuncs.advancedReboot(PowerManager.REBOOT_BOOTLOADER);
+                 break;
+            case SoftReboot:
+                 mWmFuncs.advancedReboot(PowerManager.REBOOT_SOFT);
+                 break;
+            case SystemUI:
+                 mWmFuncs.advancedReboot(PowerManager.REBOOT_SYSTEMUI);
+                 break;
+            }
+
             return true;
         }
 
@@ -1231,17 +1387,6 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         }
     };
 
-    PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onServiceStateChanged(ServiceState serviceState) {
-            if (!mHasTelephony) return;
-            final boolean inAirplaneMode = serviceState.getState() == ServiceState.STATE_POWER_OFF;
-            mAirplaneState = inAirplaneMode ? ToggleAction.State.On : ToggleAction.State.Off;
-            mAirplaneModeOn.updateState(mAirplaneState);
-            mAdapter.notifyDataSetChanged();
-        }
-    };
-
     private BroadcastReceiver mRingerModeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1287,15 +1432,17 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
         }
     };
 
+    private ToggleAction.State getUpdatedAirplaneToggleState() {
+        return (Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) == 1) ?
+                ToggleAction.State.On : ToggleAction.State.Off;
+    }
+
     private void onAirplaneModeChanged() {
         // Let the service state callbacks handle the state.
         if (mHasTelephony) return;
 
-        boolean airplaneModeOn = Settings.Global.getInt(
-                mContext.getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON,
-                0) == 1;
-        mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
+        mAirplaneState = getUpdatedAirplaneToggleState();
         mAirplaneModeOn.updateState(mAirplaneState);
     }
 

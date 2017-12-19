@@ -1473,6 +1473,7 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
                     r.launchedFromPackage, task.voiceInteractor, app.repProcState, r.icicle,
                     r.persistentState, results, newIntents, !andResume,
                     mService.isNextTransitionForward(), profilerInfo);
+            PreventRunningUtils.onLaunchActivity(r);
 
             if ((app.info.privateFlags&ApplicationInfo.PRIVATE_FLAG_CANT_SAVE_STATE) != 0) {
                 // This may be a heavy-weight process!  Note that the package
@@ -2770,6 +2771,7 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
                 pr.waitingToKill = "remove task";
             }
         }
+        PreventRunningUtils.onCleanUpRemovedTask(component);
     }
 
     int getNextStackId() {
@@ -3155,6 +3157,9 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
             }
         }
         checkReadyForSleepLocked();
+        if (mGoingToSleep.isHeld()) {
+            mGoingToSleep.release();
+        }
     }
 
     boolean shutdownLocked(int timeout) {
@@ -3264,9 +3269,6 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
 
         removeSleepTimeouts();
 
-        if (mGoingToSleep.isHeld()) {
-            mGoingToSleep.release();
-        }
         if (mService.mShuttingDown) {
             mService.notifyAll();
         }

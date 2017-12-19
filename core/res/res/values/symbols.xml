@@ -2002,6 +2002,7 @@
   <java-symbol type="string" name="demo_user_inactivity_timeout_countdown" />
   <java-symbol type="string" name="demo_user_inactivity_timeout_left_button" />
   <java-symbol type="string" name="demo_user_inactivity_timeout_right_button" />
+  <java-symbol type="string" name="config_optionalPackageVerifierName" />
 
   <java-symbol type="layout" name="resolver_list" />
   <java-symbol type="id" name="resolver_list" />
@@ -2753,6 +2754,8 @@
   <java-symbol type="layout" name="unsupported_display_size_dialog_content" />
   <java-symbol type="string" name="unsupported_display_size_message" />
 
+  <java-symbol type="bool" name="config_useDefaultBatchingForAccel" />
+
   <java-symbol type="layout" name="notification_material_action_emphasized" />
 
   <!-- Package name for the device provisioning package -->
@@ -2773,6 +2776,9 @@
 
   <java-symbol type="string" name="config_dozeDoubleTapSensorType" />
   <java-symbol type="bool" name="config_dozePulsePickup" />
+
+  <!-- Should proximity check also affect fingerprint reader-->
+  <java-symbol type="bool" name="config_proximityCheckOnFingerprintWake" />
 
   <!-- Used for MimeIconUtils. -->
   <java-symbol type="drawable" name="ic_doc_apk" />
@@ -3033,6 +3039,9 @@
   <java-symbol type="array" name="config_batteryPackageTypeService" />
 
   <java-symbol type="bool" name="config_useSystemClockforRotationSensor" />
+
+  <java-symbol type="integer" name="config_sms_authorization_timeout_ms" />
+  <java-symbol type="bool" name="config_sms_authorization_enabled" />
 
   <!-- Proximity check on screen on -->
   <java-symbol type="bool" name="config_proximityCheckOnWake" />

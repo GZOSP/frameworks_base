@@ -1233,7 +1233,7 @@ public class AudioService extends IAudioService.Stub
                 + ", volControlStream=" + mVolumeControlStream
                 + ", userSelect=" + mUserSelectedVolumeControlStream);
         final int streamType;
-        if (mUserSelectedVolumeControlStream) { // implies mVolumeControlStream != -1
+        if (mUserSelectedVolumeControlStream && (mVolumeControlStream != -1)) { // implies mVolumeControlStream != -1
             streamType = mVolumeControlStream;
         } else {
             final int maybeActiveStreamType = getActiveStreamType(suggestedStreamType);
@@ -2802,8 +2802,10 @@ public class AudioService extends IAudioService.Stub
     public void setBluetoothScoOnInt(boolean on) {
         if (on) {
             mForcedUseForComm = AudioSystem.FORCE_BT_SCO;
+            AudioSystem.setParameters("BT_SCO=on");
         } else if (mForcedUseForComm == AudioSystem.FORCE_BT_SCO) {
             mForcedUseForComm = AudioSystem.FORCE_NONE;
+            AudioSystem.setParameters("BT_SCO=off");
         }
 
         sendMsg(mAudioHandler, MSG_SET_FORCE_USE, SENDMSG_QUEUE,

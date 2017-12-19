@@ -1420,6 +1420,7 @@ public class AccountManagerService
 
     @Override
     public String getPassword(Account account) {
+        android.util.SeempLog.record(14);
         int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "getPassword: " + account
@@ -1500,6 +1501,7 @@ public class AccountManagerService
 
     @Override
     public String getUserData(Account account, String key) {
+        android.util.SeempLog.record(15);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             String msg = String.format("getUserData( account: %s, key: %s, callerUid: %s, pid: %s",
@@ -2073,6 +2075,7 @@ public class AccountManagerService
     @Override
     public void removeAccount(IAccountManagerResponse response, Account account,
             boolean expectActivityLaunch) {
+        android.util.SeempLog.record(17);
         removeAccountAsUser(
                 response,
                 account,
@@ -2514,6 +2517,7 @@ public class AccountManagerService
 
     @Override
     public void setPassword(Account account, String password) {
+        android.util.SeempLog.record(18);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "setAuthToken: " + account
@@ -2580,6 +2584,7 @@ public class AccountManagerService
 
     @Override
     public void clearPassword(Account account) {
+        android.util.SeempLog.record(19);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "clearPassword: " + account
@@ -2606,6 +2611,7 @@ public class AccountManagerService
 
     @Override
     public void setUserData(Account account, String key, String value) {
+        android.util.SeempLog.record(20);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "setUserData: " + account
@@ -2954,9 +2960,13 @@ public class AccountManagerService
                              * have users launching arbitrary activities by tricking users to
                              * interact with malicious notifications.
                              */
-                            checkKeyIntent(
+                            if (!checkKeyIntent(
                                     Binder.getCallingUid(),
-                                    intent);
+                                    intent)) {
+                                onError(AccountManager.ERROR_CODE_INVALID_RESPONSE,
+                                        "invalid intent in bundle returned");
+                                return;
+                            }
                             doNotification(
                                     mAccounts,
                                     account,
@@ -3085,6 +3095,7 @@ public class AccountManagerService
     public void addAccount(final IAccountManagerResponse response, final String accountType,
             final String authTokenType, final String[] requiredFeatures,
             final boolean expectActivityLaunch, final Bundle optionsIn) {
+        android.util.SeempLog.record(16);
         Bundle.setDefusable(optionsIn, true);
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "addAccount: accountType " + accountType
@@ -3351,9 +3362,13 @@ public class AccountManagerService
             Intent intent = null;
             if (result != null
                     && (intent = result.getParcelable(AccountManager.KEY_INTENT)) != null) {
-                checkKeyIntent(
+                if (!checkKeyIntent(
                         Binder.getCallingUid(),
-                        intent);
+                        intent)) {
+                    onError(AccountManager.ERROR_CODE_INVALID_RESPONSE,
+                            "invalid intent in bundle returned");
+                    return;
+                }
             }
             IAccountManagerResponse response;
             if (mExpectActivityLaunch && result != null
@@ -3834,6 +3849,7 @@ public class AccountManagerService
     @Override
     public void editProperties(IAccountManagerResponse response, final String accountType,
             final boolean expectActivityLaunch) {
+        android.util.SeempLog.record(21);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "editProperties: accountType " + accountType
@@ -4700,13 +4716,14 @@ public class AccountManagerService
          * into launching arbitrary intents on the device via by tricking to click authenticator
          * supplied entries in the system Settings app.
          */
-        protected void checkKeyIntent(
-                int authUid,
-                Intent intent) throws SecurityException {
+        protected boolean checkKeyIntent(int authUid, Intent intent) {
             long bid = Binder.clearCallingIdentity();
             try {
                 PackageManager pm = mContext.getPackageManager();
                 ResolveInfo resolveInfo = pm.resolveActivityAsUser(intent, 0, mAccounts.userId);
+                if (resolveInfo == null) {
+                    return false;
+                }
                 ActivityInfo targetActivityInfo = resolveInfo.activityInfo;
                 int targetUid = targetActivityInfo.applicationInfo.uid;
                 if (!isExportedSystemActivity(targetActivityInfo)
@@ -4716,9 +4733,10 @@ public class AccountManagerService
                     String activityName = targetActivityInfo.name;
                     String tmpl = "KEY_INTENT resolved to an Activity (%s) in a package (%s) that "
                             + "does not share a signature with the supplying authenticator (%s).";
-                    throw new SecurityException(
-                            String.format(tmpl, activityName, pkgName, mAccountType));
+                    Log.e(TAG, String.format(tmpl, activityName, pkgName, mAccountType));
+                    return false;
                 }
+                return true;
             } finally {
                 Binder.restoreCallingIdentity(bid);
             }
@@ -4868,9 +4886,13 @@ public class AccountManagerService
             }
             if (result != null
                     && (intent = result.getParcelable(AccountManager.KEY_INTENT)) != null) {
-                checkKeyIntent(
+                if (!checkKeyIntent(
                         Binder.getCallingUid(),
-                        intent);
+                        intent)) {
+                    onError(AccountManager.ERROR_CODE_INVALID_RESPONSE,
+                            "invalid intent in bundle returned");
+                    return;
+                }
             }
             if (result != null
                     && !TextUtils.isEmpty(result.getString(AccountManager.KEY_AUTHTOKEN))) {

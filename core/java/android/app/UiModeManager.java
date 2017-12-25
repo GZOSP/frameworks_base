@@ -98,7 +98,16 @@ public class UiModeManager {
     public static String ACTION_EXIT_DESK_MODE = "android.app.action.EXIT_DESK_MODE";
 
     /** @hide */
-    @IntDef({MODE_NIGHT_AUTO, MODE_NIGHT_NO, MODE_NIGHT_YES})
+    @IntDef({MODE_NIGHT_AUTO,
+             MODE_NIGHT_NO,
+             MODE_NIGHT_YES,
+             MODE_NIGHT_WHITE,
+             MODE_NIGHT_BRED,
+             MODE_NIGHT_MINT,
+             MODE_NIGHT_YELLOW,
+             MODE_NIGHT_PISSEL, 
+             MODE_NIGHT_BLUE,
+             MODE_NIGHT_PINK})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NightMode {}
 
@@ -119,6 +128,48 @@ public class UiModeManager {
      * always run in night mode.
      */
     public static final int MODE_NIGHT_YES = Configuration.UI_MODE_NIGHT_YES >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (WHITE).
+     */
+    public static final int MODE_NIGHT_WHITE = Configuration.UI_MODE_NIGHT_WHITE >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in night mode (RED).
+     */
+    public static final int MODE_NIGHT_BRED = Configuration.UI_MODE_NIGHT_BRED >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (MINT).
+     */
+    public static final int MODE_NIGHT_MINT = Configuration.UI_MODE_NIGHT_MINT >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (YELLOW).
+     */
+    public static final int MODE_NIGHT_YELLOW = Configuration.UI_MODE_NIGHT_YELLOW >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (GOLD).
+     */
+    public static final int MODE_NIGHT_PISSEL = Configuration.UI_MODE_NIGHT_PISSEL >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (BLUE).
+     */
+    public static final int MODE_NIGHT_BLUE = Configuration.UI_MODE_NIGHT_BLUE >> 4;
+
+    /**
+     * Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
+     * always run in day mode (PINK).
+     */
+    public static final int MODE_NIGHT_PINK = Configuration.UI_MODE_NIGHT_PINK >> 4;
 
     private IUiModeManager mService;
 

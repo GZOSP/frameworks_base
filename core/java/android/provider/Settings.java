@@ -4602,7 +4602,10 @@ public final class Settings {
         public static final String ALARM_BLOCKING_ENABLED = "alarm_blocking_enabled";
 
         /**
-         * Wheter to play notification sound and vibration if screen is on
+         * Wheter to play notification sound and vibration if screen is ON
+         * 0 - never
+         * 1 - always
+         * 2 - if media playing
          * @hide
          */
         public static final String NOTIFICATION_SOUND_VIB_SCREEN_ON = "notification_sound_vib_screen_on";

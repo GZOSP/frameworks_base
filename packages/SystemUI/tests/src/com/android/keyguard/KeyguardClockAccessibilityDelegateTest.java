@@ -48,7 +48,6 @@ public class KeyguardClockAccessibilityDelegateTest extends SysuiTestCase {
         mView = new TextView(mContext);
         mView.setText(m12HoursFormat);
         mView.setContentDescription(m12HoursFormat);
-        mView.setAccessibilityDelegate(new KeyguardClockAccessibilityDelegate(mContext));
     }
 
     @Test
@@ -81,21 +80,6 @@ public class KeyguardClockAccessibilityDelegateTest extends SysuiTestCase {
 
         assertFalse(TextUtils.isEmpty(info.getContentDescription()));
         assertTrue(isAscii(info.getContentDescription()));
-    }
-
-    @Test
-    public void isNeeded_returnsTrueIfDateFormatsContainNonAscii() {
-        if (!isAscii(m12HoursFormat) || !isAscii(m24HoursFormat)) {
-            assertTrue(KeyguardClockAccessibilityDelegate.isNeeded(mContext));
-        }
-    }
-
-    @Test
-    public void isNeeded_returnsWhetherFancyColonExists() {
-        boolean hasFancyColon = !TextUtils.isEmpty(mContext.getString(
-                R.string.keyguard_fancy_colon));
-
-        assertEquals(hasFancyColon, KeyguardClockAccessibilityDelegate.isNeeded(mContext));
     }
 
     private boolean isAscii(CharSequence text) {

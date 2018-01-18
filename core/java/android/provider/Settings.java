@@ -4696,6 +4696,12 @@ public final class Settings {
          */
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
+        /**
+         * Force an Ambient notification when a new media track is being played
+         * @hide
+         */
+        public static final String FORCE_AMBIENT_FOR_MEDIA = "force_ambient_for_media";
+
         /** End of VALIDUS system settings**/
 
         /**

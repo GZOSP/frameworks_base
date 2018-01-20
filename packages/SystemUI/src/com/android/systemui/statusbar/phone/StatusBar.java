@@ -683,7 +683,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 mNavigationBar.setMediaPlaying(true);
             }
         } else {
-            if (mAmbientIndicationContainer != null) {
+            if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
                 ((AmbientIndicationContainer)mAmbientIndicationContainer).hideIndication();
             }
             mNoMan.setMediaPlaying(false);
@@ -703,7 +703,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 if (mTickerEnabled == 2) {
                     tick(entry.notification, true, true, mMediaMetadata);
                 }
-                if (mAmbientIndicationContainer != null) {
+                if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
                     ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
                 }
                 break;
@@ -712,7 +712,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     }
 
     public void triggerAmbientForMedia() {
-        if (mAmbientMediaPlaying != 0) {
+        if (mAmbientMediaPlaying == 2 || mAmbientMediaPlaying == 3) {
             mDozeServiceHost.fireNotificationMedia();
         }
     }
@@ -5885,7 +5885,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         }
         mStatusBarWindowManager.setDozing(mDozing);
         mStatusBarKeyguardViewManager.setDozing(mDozing);
-        if (mAmbientIndicationContainer instanceof DozeReceiver) {
+        if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer instanceof DozeReceiver) {
             ((DozeReceiver) mAmbientIndicationContainer).setDozing(mDozing);
         }
         updateDozingState();
@@ -5970,14 +5970,14 @@ public class StatusBar extends SystemUI implements DemoMode,
                         // Otherwise just show the always-on screen.
                         setPulsing(pulsingEntries);
                     }
-                    setForcedMediaPulse(mAmbientMediaPlaying == 2 ? reason : -1);
+                    setCleanLayout(mAmbientMediaPlaying == 3 ? reason : -1);
                 }
 
                 @Override
                 public void onPulseFinished() {
                     callback.onPulseFinished();
                     setPulsing(null);
-                    setForcedMediaPulse(-1);
+                    setCleanLayout(-1);
                 }
 
                 private void setPulsing(Collection<HeadsUpManager.HeadsUpEntry> pulsing) {
@@ -5987,11 +5987,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                     mIgnoreTouchWhilePulsing = false;
                 }
 
-                private void setForcedMediaPulse(int reason) {
-                    mNotificationPanel.setForcedMediaPulse(reason);
-                    mNotificationShelf.setForcedMediaPulse(reason);
-                    if (mAmbientIndicationContainer != null) {
-                        ((AmbientIndicationContainer)mAmbientIndicationContainer).setForcedMediaPulse(reason);
+                private void setCleanLayout(int reason) {
+                    mNotificationPanel.setCleanLayout(reason);
+                    mNotificationShelf.setCleanLayout(reason);
+                    if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer).setCleanLayout(reason);
                     }
                 }
             }, reason);
@@ -6488,6 +6488,9 @@ public class StatusBar extends SystemUI implements DemoMode,
         mAmbientMediaPlaying = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.FORCE_AMBIENT_FOR_MEDIA, 0,
                 UserHandle.USER_CURRENT);
+        if (mAmbientMediaPlaying != 0 && mAmbientIndicationContainer != null) {
+            ((AmbientIndicationContainer)mAmbientIndicationContainer).setIndication(mMediaMetadata);
+        }
     }
 
     protected final ContentObserver mNavbarObserver = new ContentObserver(mHandler) {

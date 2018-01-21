@@ -65,4 +65,6 @@
     <!-- Doze always on default value -->
     <java-symbol type="bool" name="config_dozeAlwaysOnDisplayEnabledDefault" />
 
+    <java-symbol type="bool" name="config_canForceDozeNotifications" />
+
 </resources>

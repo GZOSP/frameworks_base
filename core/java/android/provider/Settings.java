@@ -4042,7 +4042,7 @@ public final class Settings {
         public static final String VOLUME_KEYS_CONTROL_MEDIA_STREAM =
                 "volume_keys_control_media_stream";
 
-        /** Whether to skip music track with volume rocker 
+        /** Whether to skip music track with volume rocker
         /**
          * @hide
          */
@@ -4705,6 +4705,11 @@ public final class Settings {
          * @hide
          */
         public static final String FORCE_AMBIENT_FOR_MEDIA = "force_ambient_for_media";
+
+        /**
+         * @hide
+         */
+        public static final String SHOW_USB_MODE_DIALOG = "show_usb_mode_dialog";
 
         /** End of VALIDUS system settings**/
 

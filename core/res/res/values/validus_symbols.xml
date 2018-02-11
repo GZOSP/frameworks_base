@@ -65,4 +65,6 @@
 
     <java-symbol type="bool" name="config_canForceDozeNotifications" />
 
+    <java-symbol type="bool" name="config_enableScreenrecordChord" />
+
 </resources>

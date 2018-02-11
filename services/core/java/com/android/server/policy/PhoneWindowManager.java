@@ -797,6 +797,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mScreenshotChordVolumeDownKeyTriggered;
     private long mScreenshotChordVolumeDownKeyTime;
     private boolean mScreenshotChordVolumeDownKeyConsumed;
+    private boolean mScreenrecordChordEnabled;
     private boolean mA11yShortcutChordVolumeUpKeyTriggered;
     private long mA11yShortcutChordVolumeUpKeyTime;
     private boolean mA11yShortcutChordVolumeUpKeyConsumed;
@@ -1807,6 +1808,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mScreenshotRunnable);
     }
 
+    private void cancelPendingScreenrecordChordAction() {
+        mHandler.removeCallbacks(mScreenrecordRunnable);
+    }
+
     private void cancelPendingAccessibilityShortcutAction() {
         mHandler.removeMessages(MSG_ACCESSIBILITY_SHORTCUT);
     }
@@ -2305,6 +2310,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mScreenshotChordEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_enableScreenshotChord);
+
+        mScreenrecordChordEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enableScreenrecordChord);
 
         mGlobalKeyManager = new GlobalKeyManager(mContext);
 

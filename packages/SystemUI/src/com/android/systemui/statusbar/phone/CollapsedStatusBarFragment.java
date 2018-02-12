@@ -78,6 +78,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     private DarkIconManager mDarkIconManager;
     private SignalClusterView mSignalClusterView;
     private LinearLayout mCenterClockLayout;
+    private View mLeftClock;
+    private int mClockStyle;
 
     private int mTickerEnabled;
     private TickerObserver mTickerObserver;
@@ -105,6 +107,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     false, this, UserHandle.USER_ALL);
             getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_LOGO_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUSBAR_CLOCK_STYLE),
                     false, this, UserHandle.USER_ALL);
         }
 
@@ -182,6 +187,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mSignalClusterView = mStatusBar.findViewById(R.id.signal_cluster);
         mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+        mLeftClock = mStatusBar.findViewById(R.id.left_clock);
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         mValidusLogo = mStatusBar.findViewById(R.id.status_bar_logo);
         updateSettings(false);
@@ -253,8 +259,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if ((diff1 & DISABLE_NOTIFICATION_ICONS) != 0) {
             if ((state1 & DISABLE_NOTIFICATION_ICONS) != 0) {
                 hideNotificationIconArea(animate);
+                hideLeftClock(animate);
             } else {
                 showNotificationIconArea(animate);
+                showLeftClock(animate);
             }
         }
     }
@@ -311,6 +319,16 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             animateShow(mValidusLogo, animate);
         animateShow(mCenterClockLayout, animate);
         }
+    }
+
+    public void hideLeftClock(boolean animate) {
+        if (mLeftClock != null) {
+            animateHide(mLeftClock, animate, false);
+        }
+    }
+
+    public void showLeftClock(boolean animate) {
+        updateClockStyle(animate);
     }
 
     /**
@@ -408,6 +426,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mLogoStyle = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_STYLE, 0,
                 UserHandle.USER_CURRENT);
+        mClockStyle = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.STATUSBAR_CLOCK_STYLE, 0, UserHandle.USER_CURRENT);
+        updateClockStyle(animate);
 
         switch(mLogoStyle) {
                 // GZR Skull
@@ -456,6 +477,14 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             } else {
                 animateHide(mValidusLogo, animate, false);
             }
+        }
+    }
+
+    private void updateClockStyle(boolean animate) {
+        if (mClockStyle == 0 || mClockStyle == 1) {
+            animateHide(mLeftClock, animate, false);
+        } else {
+            animateShow(mLeftClock, animate);
         }
     }
 }

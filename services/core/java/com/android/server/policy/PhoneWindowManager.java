@@ -596,6 +596,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mHasSoftInput = false;
     boolean mTranslucentDecorEnabled = true;
     boolean mUseTvRouting;
+    boolean mHomeWakeScreen;
 
     private boolean mHandleVolumeKeysInWM;
 
@@ -1074,6 +1075,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ANSWER_VOLUME_BUTTON_BEHAVIOR_ANSWER), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.HOME_WAKE_SCREEN), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -2519,6 +2523,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.INCALL_BACK_BUTTON_BEHAVIOR,
                     Settings.Secure.INCALL_BACK_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
+            mHomeWakeScreen = (Settings.System.getIntForUser(resolver,
+                    Settings.System.HOME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);                    
 
             // Configure wake gesture.
             boolean wakeGestureEnabledSetting = Settings.Secure.getIntForUser(resolver,
@@ -6607,6 +6613,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         MediaSessionLegacyHelper.getHelper(mContext).sendVolumeKeyEvent(
                                 event, AudioManager.USE_DEFAULT_STREAM_TYPE, true);
                     }
+                }
+                break;
+            }
+
+            case KeyEvent.KEYCODE_HOME: {
+                if (down && !interactive && mHomeWakeScreen) {
+                    isWakeKey = true;
                 }
                 break;
             }

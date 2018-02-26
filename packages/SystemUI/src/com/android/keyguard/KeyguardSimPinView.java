@@ -203,12 +203,6 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         return R.id.simPinEntry;
     }
 
-    // Listener callback.
-    @Override
-    public void onTextChanged() {
-        // SIM PIN doesn't use quick unlock
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -217,6 +211,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             ((EmergencyCarrierArea) mEcaView).setCarrierTextVisible(true);
         }
         mSimImageView = findViewById(R.id.keyguard_sim);
+        mPasswordEntry.setQuickUnlockListener(null);
     }
 
     @Override

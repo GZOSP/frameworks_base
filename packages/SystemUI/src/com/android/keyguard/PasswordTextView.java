@@ -95,24 +95,23 @@ public class PasswordTextView extends View {
     private Interpolator mFastOutSlowInInterpolator;
     private boolean mShowPassword;
     private UserActivityListener mUserActivityListener;
+    protected QuickUnlockListener mQuickUnlockListener;
 
     public interface UserActivityListener {
         void onUserActivity();
     }
 
-    public interface OnTextChangedListener {
-        void onTextChanged();
+    /* Quick unlock management for PIN view. */
+    public interface QuickUnlockListener {
+        /**
+         * Validate current password and prepare callback if verified.
+         * @param password The password string to be verified.
+         */
+        void onValidateQuickUnlock(String password);
     }
-    private OnTextChangedListener mOnTextChangedListener = null;
 
-    public void setOnTextChangedListener(OnTextChangedListener onTextChangedListener) {
-        mOnTextChangedListener = onTextChangedListener;
-    }
-
-    private void textChanged() {
-        if (mOnTextChangedListener != null) {
-            mOnTextChangedListener.onTextChanged();
-        }
+    public void setQuickUnlockListener(QuickUnlockListener listener) {
+        mQuickUnlockListener = listener;
     }
 
     public PasswordTextView(Context context) {
@@ -243,9 +242,12 @@ public class PasswordTextView extends View {
                 previousState.swapToDotWhenAppearFinished();
             }
         }
-        textChanged();
         userActivity();
         sendAccessibilityEventTypeViewTextChanged(textbefore, textbefore.length(), 0, 1);
+
+        if (mQuickUnlockListener != null) {
+            mQuickUnlockListener.onValidateQuickUnlock(mText);
+        }
     }
 
     public void setUserActivityListener(UserActivityListener userActivitiListener) {
@@ -268,7 +270,6 @@ public class PasswordTextView extends View {
             charState.startRemoveAnimation(0, 0);
             sendAccessibilityEventTypeViewTextChanged(textbefore, textbefore.length() - 1, 1, 0);
         }
-        textChanged();
         userActivity();
     }
 
@@ -317,7 +318,6 @@ public class PasswordTextView extends View {
         if (!animated) {
             mTextChars.clear();
         }
-        textChanged();
         if (announce) {
             sendAccessibilityEventTypeViewTextChanged(textbefore, 0, textbefore.length(), 0);
         }

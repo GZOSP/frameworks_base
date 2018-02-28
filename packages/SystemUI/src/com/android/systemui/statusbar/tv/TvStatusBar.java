@@ -60,4 +60,8 @@ public class TvStatusBar extends SystemUI implements Callbacks {
         }
     }
 
+    @Override // CommandQueue
+    public void setAutoRotate(boolean enabled) {
+    }
+
 }

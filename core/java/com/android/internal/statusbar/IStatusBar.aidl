@@ -136,5 +136,6 @@ oneway interface IStatusBar
      * Validus
      */
     void toggleCameraFlash();
+    void setAutoRotate(boolean enabled);
 
 }

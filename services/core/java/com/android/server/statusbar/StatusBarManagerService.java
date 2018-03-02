@@ -1120,6 +1120,15 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
         return mContext.getResources().getStringArray(R.array.config_statusBarIcons);
     }
 
+    @Override
+    public void setAutoRotate(boolean enabled) {
+        if (mBar != null) {
+            try {
+                mBar.setAutoRotate(enabled);
+            } catch (RemoteException ex) {}
+        }
+    }
+
     // ================================================================================
     // Can be called from any thread
     // ================================================================================

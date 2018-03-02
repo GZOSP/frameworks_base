@@ -4574,5 +4574,6 @@ message MetricsEvent {
 
     // Validus constants
     VALIDUS = 1500;
+    WOLVESDEN = 1501;
   }
 }

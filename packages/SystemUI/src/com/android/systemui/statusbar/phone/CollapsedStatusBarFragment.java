@@ -139,8 +139,9 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
             if ((uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_LOGO))) ||
                 (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_LOGO_STYLE))) ||
                 (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_LOGO_COLOR)))){
-                updateSettings(true);
+                updateLogoSettings(true);
             }
+            updateSettings(true);
         }
     }
     private ValidusSettingsObserver mValidusSettingsObserver = new ValidusSettingsObserver(mHandler);
@@ -214,6 +215,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         Dependency.get(DarkIconDispatcher.class).addDarkReceiver(mSignalClusterView);
         mValidusLogo = mStatusBar.findViewById(R.id.status_bar_logo);
         updateSettings(false);
+        updateLogoSettings(false);
         // Default to showing until we know otherwise.
         showSystemIconArea(false);
         initEmergencyCryptkeeperText();
@@ -330,10 +332,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateHide(mNotificationIconAreaInner, animate, true);
         if (mShowLogo) {
             animateHide(mValidusLogo, animate, true);
+        }
         animateHide(mCenterClockLayout, animate, true);
         if (((Clock)mLeftClock).isEnabled()) {
             animateHide(mLeftClock, animate, true);
-        }
         }
     }
 
@@ -341,10 +343,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         animateShow(mNotificationIconAreaInner, animate);
         if (mShowLogo) {
             animateShow(mValidusLogo, animate);
+        }
         animateShow(mCenterClockLayout, animate);
         if (((Clock)mLeftClock).isEnabled()) {
             animateShow(mLeftClock, animate);
-        }
         }
     }
 
@@ -426,6 +428,20 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void updateSettings(boolean animate) {
+
+        if (mStatusBar == null) return;
+
+        if (getContext() == null) {
+            return;
+        }
+
+        ((Clock)mClock).updateSettings();
+        ((Clock)mCenterClock).updateSettings();
+        ((Clock)mLeftClock).updateSettings();
+    }
+
+    // Let's separate out LOGO updates exclusively.
+    public void updateLogoSettings(boolean animate) {
         Drawable logo = null;
 
         if (mStatusBar == null) return;
@@ -443,9 +459,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mLogoStyle = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_STYLE, 0,
                 UserHandle.USER_CURRENT);
-        ((Clock)mClock).updateSettings();
-        ((Clock)mCenterClock).updateSettings();
-        ((Clock)mLeftClock).updateSettings();
 
         switch(mLogoStyle) {
                 // GZR Skull

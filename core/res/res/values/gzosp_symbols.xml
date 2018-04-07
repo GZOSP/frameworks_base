@@ -36,4 +36,9 @@
     <!-- Whether notify fingerprint client of successful cancelled authentication -->
     <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
 
+    <!-- Button Brightness -->
+    <java-symbol type="integer" name="config_buttonBrightnessSettingMinimum" />
+    <java-symbol type="integer" name="config_buttonBrightnessSettingMaximum" />
+    <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
+
 </resources>

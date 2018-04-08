@@ -126,4 +126,8 @@
     <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_expanded_navigation_off">Hide navbar</string>
     <string name="quick_settings_expanded_statusbar_off">Hide statusbar</string>
+
+    <!-- Smart pixels QS tile -->
+    <string name="quick_settings_smart_pixels">Smart pixels</string>
+    <string name="quick_settings_smart_pixels_on_power_save">Auto-enabled smart pixels</string>
 </resources>

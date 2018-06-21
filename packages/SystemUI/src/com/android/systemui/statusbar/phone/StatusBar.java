@@ -3897,8 +3897,13 @@ public class StatusBar extends SystemUI implements DemoMode,
         // The system wallpaper defines if QS should be light or dark.
         WallpaperColors systemColors = mColorExtractor
                 .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
-        final boolean useDarkTheme = systemColors != null
+        final boolean wallpaperWantsDarkTheme = systemColors != null
                 && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
+        final Configuration config = mContext.getResources().getConfiguration();
+        final boolean nightModeWantsDarkTheme = DARK_THEME_IN_NIGHT_MODE
+                && (config.uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES;
+        final boolean useDarkTheme = wallpaperWantsDarkTheme || nightModeWantsDarkTheme;
         if (isUsingDarkTheme() != useDarkTheme) {
             mUiOffloadThread.submit(() -> {
                 unfuckBlackWhiteAccent();

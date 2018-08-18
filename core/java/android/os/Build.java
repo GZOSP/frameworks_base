@@ -223,6 +223,18 @@ public class Build {
                 "ro.build.version.security_patch", "");
 
         /**
+         * The platform build number override from an OEM vendor prop.
+         * In return, this should retarget the default build number.
+         */
+        public static final String BUILD_NUMBER_OVERRIDE = getString("ro.vendor.override.build_display");
+
+        /**
+         * The platform security patch level override from an OEM vendor prop.
+         * In return, this should retarget the default patch level.
+         */
+        public static final String SECURITY_PATCH_OVERRIDE = getString("ro.vendor.override.security_patch");
+
+        /**
          * The user-visible SDK version of the framework in its raw String
          * representation; use {@link #SDK_INT} instead.
          *

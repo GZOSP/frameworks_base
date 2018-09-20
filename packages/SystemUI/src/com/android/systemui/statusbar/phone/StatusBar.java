@@ -3901,31 +3901,31 @@ public class StatusBar extends SystemUI implements DemoMode,
      * Switches theme from light to dark and vice-versa.
      */
     protected void updateTheme() {
-        final boolean inflated = mStackScroller != null && mStatusBarWindowManager != null;
+        final boolean inflated = mStackScroller != null;
 
         // The system wallpaper defines if QS should be light or dark.
-        int userThemeSetting = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SYSTEM_THEME, 0, mLockscreenUserManager.getCurrentUserId());
-        boolean useDarkTheme = false;
-        if (userThemeSetting == 0) {
-            // The system wallpaper defines if QS should be light or dark.
-            WallpaperColors systemColors = mColorExtractor
-                    .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
-            useDarkTheme = systemColors != null
-                    && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
-        } else {
-            useDarkTheme = userThemeSetting == 2;
-        }
+        WallpaperColors systemColors = mColorExtractor
+                .getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
+        final boolean useDarkTheme = systemColors != null
+                && (systemColors.getColorHints() & WallpaperColors.HINT_SUPPORTS_DARK_THEME) != 0;
         if (isUsingDarkTheme() != useDarkTheme) {
-            try {
-                mOverlayManager.setEnabled("com.android.system.theme.dark",
-                        useDarkTheme, mLockscreenUserManager.getCurrentUserId());
-                if (useDarkTheme) {
-                    unloadStockDarkTheme();
+            mUiOffloadThread.submit(() -> {
+                try {
+                    mOverlayManager.setEnabled("com.android.system.theme.dark",
+                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
+                    mOverlayManager.setEnabled("com.android.system.theme.dark",
+                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
+                    mOverlayManager.setEnabled("com.android.settings.theme.dark",
+                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
+                    mOverlayManager.setEnabled("com.android.settings.intelligence.theme.dark",
+                            useDarkTheme, mLockscreenUserManager.getCurrentUserId());
+                    if (useDarkTheme) {
+                        unloadStockDarkTheme();
+                    }
+                } catch (RemoteException e) {
+                    Log.w(TAG, "Can't change theme", e);
                 }
-            } catch (RemoteException e) {
-                Log.w(TAG, "Can't change theme", e);
-            }
+            });
         }
 
         // Lock wallpaper defines the color of the majority of the views, hence we'll use it

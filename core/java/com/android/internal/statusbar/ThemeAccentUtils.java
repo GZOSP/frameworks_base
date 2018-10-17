@@ -51,6 +51,13 @@ public class ThemeAccentUtils {
         "com.android.gboard.theme.light", // 1
     };
 
+    // Black themes
+    private static final String[] BLACK_THEMES = {
+        "com.android.system.theme.black", // 0
+        "com.android.settings.theme.black", // 1
+        "com.android.systemui.qstheme.black", // 2
+    };
+
     // Accents
     private static final String[] ACCENTS = {
         "default_accent", // 0
@@ -110,6 +117,18 @@ public class ThemeAccentUtils {
         }
         return themeInfo != null && themeInfo.isEnabled();
     }
+
+     // Check for the black system theme
+     public static boolean isUsingBlackTheme(IOverlayManager om, int userId) {
+         OverlayInfo themeInfo = null;
+         try {
+             themeInfo = om.getOverlayInfo(BLACK_THEMES[0],
+                     userId);
+         } catch (RemoteException e) {
+             e.printStackTrace();
+         }
+         return themeInfo != null && themeInfo.isEnabled();
+     }
 
     // Set light / dark theme
     public static void setLightDarkTheme(IOverlayManager om, int userId, boolean useDarkTheme) {
@@ -171,6 +190,16 @@ public class ThemeAccentUtils {
             e.printStackTrace();
         }
         return themeInfo != null && themeInfo.isEnabled();
+    }
+
+     public static void setLightBlackTheme(IOverlayManager om, int userId, boolean useBlackTheme) {
+         for (String theme : BLACK_THEMES) {
+                 try {
+                     om.setEnabled(theme,
+                         useBlackTheme, userId);
+                 } catch (RemoteException e) {
+                 }
+         }
     }
 
     // Switches theme accent from one to another or back to stock

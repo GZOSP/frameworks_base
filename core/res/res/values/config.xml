@@ -3523,6 +3523,9 @@
     <!-- Brand value for attestation of misprovisioned device. -->
     <string name="config_misprovisionedBrandValue" translatable="false"></string>
 
+    <!-- Component name for default assistant on this device -->
+    <string name="config_defaultAssistantComponentName"></string>
+
     <!-- Default value for proximity check on screen wake
          NOTE ! - Enable for devices that have a fast response proximity sensor (ideally < 300ms)
     -->

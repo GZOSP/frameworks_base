@@ -4004,7 +4004,6 @@ public class NotificationStackScrollLayout extends ViewGroup
             x += getTranslationX();
         }
         setTranslationX(x);
-    }
 
     public void setVerticalPanelTranslation(float verticalPanelTranslation) {
         mVerticalPanelTranslation = verticalPanelTranslation;

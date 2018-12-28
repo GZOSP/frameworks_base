@@ -3,7 +3,11 @@
 
     <dimen name="quick_status_bar_system_icons_margin_top">8dp</dimen>
 
+    <!-- QS detail view scrolling -->
+    <dimen name="qs_detail_item_height_twoline">72dp</dimen>
+
     <!-- Network traffic monitor -->
     <dimen name="net_traffic_multi_text_size">8dp</dimen>
     <dimen name="net_traffic_txt_img_padding">2dp</dimen>
+
 </resources>

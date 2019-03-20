@@ -37,4 +37,6 @@
     <!-- Lockscreen Charging -->
     <string name="tuner_keyguard_show_watt_title">Show charging watt</string>
     <string name="tuner_keyguard_show_watt_summary">Show charging watt value in mW</string>
+    <string name="tuner_keyguard_show_current_title">Show charging current</string>
+    <string name="tuner_keyguard_show_current_summary">Show charging current values</string>
 </resources>

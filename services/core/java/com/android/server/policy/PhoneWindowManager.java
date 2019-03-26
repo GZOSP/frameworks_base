@@ -6881,11 +6881,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Apply custom policy for supported key codes.
         if (canApplyCustomPolicy(keyCode) && !isCustomSource) {
             if (mNavBarEnabled && !navBarKey /* TODO> && !isADBVirtualKeyOrAnyOtherKeyThatWeNeedToHandleAKAWhenMonkeyTestOrWHATEVER! */) {
-                if (DEBUG_INPUT) {
-                    Log.d(TAG, "interceptKeyBeforeQueueing(): key policy: mNavBarEnabled, discard hw event.");
+                // Case where key event is from neither hardware key nor nav bar key.
+                if (virtualKey && !virtualHardKey) {
+                    if (DEBUG_INPUT) {
+                        Log.d(TAG, "interceptKeyBeforeQueueing(): key policy: key triggered by unknown source, allowing.");
+                    }
+                } else {
+                    if (DEBUG_INPUT) {
+                        Log.d(TAG, "interceptKeyBeforeQueueing(): key policy: mNavBarEnabled, discard hw event.");
+                    }
+                    // Don't allow key events from hw keys when navbar is enabled.
+                    return 0;
                 }
-                // Don't allow key events from hw keys when navbar is enabled.
-                return 0;
             } else if (!interactive) {
                 if (DEBUG_INPUT) {
                     Log.d(TAG, "interceptKeyBeforeQueueing(): key policy: screen not interactive, discard hw event.");

@@ -97,4 +97,9 @@
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
     </string-array>
 
+    <!-- Show a custom view for FOD -->
+    <bool name="config_needCustomFODView">false</bool>
+
+    <bool name="config_usesOnePlusFOD">false</bool>
+
 </resources>

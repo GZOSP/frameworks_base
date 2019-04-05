@@ -67,4 +67,8 @@
     <java-symbol type="array" name="config_deviceKeyHandlerLibs" />
     <java-symbol type="array" name="config_deviceKeyHandlerClasses" />
 
+    <!-- FoD -->
+    <java-symbol type="bool" name="config_needCustomFODView" />
+    <java-symbol type="bool" name="config_usesOnePlusFOD" />
+
 </resources>

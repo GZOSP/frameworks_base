@@ -89,4 +89,8 @@
     <!-- Internal default to navigation bar value -->
     <bool name="config_defaultToNavigationBar">true</bool>
 
+    <!-- Show a custom view for FOD -->
+    <bool name="config_needCustomFODView">false</bool>
+    <bool name="config_usesOnePlusFOD">false</bool>
+
 </resources>

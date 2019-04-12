@@ -4118,6 +4118,15 @@ public final class Settings {
             new SettingsValidators.InclusiveIntegerRangeValidator(0, 255);
 
         /**
+         * @hide
+         */
+        public static final String OMNI_CUSTOM_FP_ICON = "custom_fingerprint_icon";
+
+        /** @hide */
+        private static final Validator OMNI_CUSTOM_FP_ICON_VALIDATOR =
+                ANY_STRING_VALIDATOR;
+
+        /**
          * Whether user can enable/disable button brightness.
          * <p>
          * Type: int (0 for false, 1 for true)
@@ -4352,6 +4361,7 @@ public final class Settings {
             HAPTIC_FEEDBACK_INTENSITY,
             DISPLAY_COLOR_MODE,
             NOTIFICATION_LIGHT_PULSE,
+            OMNI_CUSTOM_FP_ICON,
         };
 
         /**
@@ -4483,6 +4493,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(KEY_CAMERA_DOUBLE_TAP_ACTION);
             PRIVATE_SETTINGS.add(OMNI_USE_BOTTOM_GESTURE_NAVIGATION);
             PRIVATE_SETTINGS.add(OMNI_SHOW_BATTERY_IMAGE);
+            PRIVATE_SETTINGS.add(OMNI_CUSTOM_FP_ICON);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
         }
@@ -4579,6 +4590,7 @@ public final class Settings {
             VALIDATORS.put(BUTTON_BRIGHTNESS_ENABLED, BUTTON_BRIGHTNESS_ENABLED_VALIDATOR);
             VALIDATORS.put(OMNI_USE_BOTTOM_GESTURE_NAVIGATION,OMNI_USE_BOTTOM_GESTURE_NAVIGATION_VALIDATOR);
             VALIDATORS.put(OMNI_SHOW_BATTERY_IMAGE, OMNI_SHOW_BATTERY_IMAGE_VALIDATOR);
+            VALIDATORS.put(OMNI_CUSTOM_FP_ICON, OMNI_CUSTOM_FP_ICON_VALIDATOR);
         }
 
         /**

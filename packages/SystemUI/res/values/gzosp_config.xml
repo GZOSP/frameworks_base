@@ -22,10 +22,13 @@
     -->
     <integer name="hardware_ui_align">53</integer>
 
-
     <!-- Should we listen for fingerprints when the screen is off?  Devices
          with a rear-mounted sensor want this, but certain devices have
          the sensor embedded in the power key and listening all the time
          causes a poor experience. -->
     <bool name="config_fingerprintWakeAndUnlock">true</bool>
+
+    <!-- Lockscreen Charging/temp -->
+    <integer name="config_battTempDivider" translatable="false">10</integer>
+
 </resources>

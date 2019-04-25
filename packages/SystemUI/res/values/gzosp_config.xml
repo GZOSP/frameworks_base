@@ -28,4 +28,8 @@
          the sensor embedded in the power key and listening all the time
          causes a poor experience. -->
     <bool name="config_fingerprintWakeAndUnlock">true</bool>
+        
+    <!-- Lockscreen Charging/temp -->  
+    <integer name="config_battTempDivider" translatable="false">10</integer>
+    
 </resources>

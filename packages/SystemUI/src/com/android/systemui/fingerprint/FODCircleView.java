@@ -17,6 +17,7 @@
 package com.android.systemui.fingerprint;
 
 import android.app.KeyguardManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -192,13 +193,16 @@ public class FODCircleView extends ImageView implements OnTouchListener {
             mH = -1;
         }
 
+        Resources res = context.getResources();
+
         mPaintFingerprint.setAntiAlias(true);
-        mPaintFingerprint.setColor(Color.GREEN);
+        mPaintFingerprint.setColor(res.getColor(R.color.config_fodColor));
 
         setCustomIcon();
 
         mPaintShow.setAntiAlias(true);
-        mPaintShow.setColor(Color.argb(0x18, 0x00, 0xff, 0x00));
+        mPaintShow.setColor(res.getColor(R.color.config_fodColor));
+
         setOnTouchListener(this);
         mWM = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
 

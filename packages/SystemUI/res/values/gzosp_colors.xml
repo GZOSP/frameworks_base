@@ -19,7 +19,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Color of the FOD view -->
-    <color name="config_fodColor">#00ffea</color>
+    <color name="config_fodColor">#00ffff</color>
 
 </resources>
 

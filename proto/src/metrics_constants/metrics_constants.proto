@@ -7430,6 +7430,6 @@ message MetricsEvent {
     // END OF AOSP CONSTANTS
 
     // Gzosp
-    GZOSP = 1000;
+    GZOSP = 1760;
   }
 }

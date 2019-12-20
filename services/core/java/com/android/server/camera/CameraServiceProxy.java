@@ -123,6 +123,7 @@ public class CameraServiceProxy extends SystemService
 
     private final @NfcNotifyState int mNotifyNfc;
     private boolean mLastNfcPollState = true;
+    private final boolean mAllowMediaUid;
 
     /**
      * Structure to track camera usage
@@ -232,6 +233,8 @@ public class CameraServiceProxy extends SystemService
         }
         mNotifyNfc = notifyNfc;
         if (DEBUG) Slog.v(TAG, "Notify NFC state is " + nfcNotifyToString(mNotifyNfc));
+        mAllowMediaUid = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_allowMediaUidForCameraServiceProxy);
     }
 
     @Override

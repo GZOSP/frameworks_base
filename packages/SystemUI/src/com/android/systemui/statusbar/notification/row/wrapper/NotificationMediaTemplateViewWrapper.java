@@ -32,7 +32,6 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.ViewTreeObserver;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -47,6 +46,7 @@ import com.android.systemui.statusbar.TransformableView;
 import com.android.systemui.statusbar.notification.row.ExpandableNotificationRow;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Wraps a notification containing a media template

@@ -1366,9 +1366,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView
         if (isChildInGroup()) {
             mTranslationWhenRemoved += getNotificationParent().getTranslationY();
         }
-        for (NotificationContentView l : mLayouts) {
-            l.setRemoved();
-        }
+        mPrivateLayout.setRemoved();
     }
 
     public boolean wasChildInGroupWhenRemoved() {

@@ -1542,15 +1542,6 @@ public class NotificationContentView extends FrameLayout {
         if (mHeadsUpRemoteInput != null) {
             mHeadsUpRemoteInput.setRemoved();
         }
-        if (mExpandedWrapper != null) {
-            mExpandedWrapper.setRemoved();
-        }
-        if (mContractedWrapper != null) {
-            mContractedWrapper.setRemoved();
-        }
-        if (mHeadsUpWrapper != null) {
-            mHeadsUpWrapper.setRemoved();
-        }
     }
 
     public void setContentHeightAnimating(boolean animating) {

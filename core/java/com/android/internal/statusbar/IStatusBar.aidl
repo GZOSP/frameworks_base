@@ -233,4 +233,6 @@ oneway interface IStatusBar
      * Gzosp
      */
     void toggleCameraFlash();
+
+    void killForegroundApp();
 }

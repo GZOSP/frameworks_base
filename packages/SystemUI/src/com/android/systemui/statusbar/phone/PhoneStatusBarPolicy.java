@@ -402,7 +402,11 @@ public class PhoneStatusBarPolicy
                 mContext.getString(R.string.accessibility_quick_settings_bluetooth_on);
         boolean bluetoothVisible = false;
         if (mBluetooth != null) {
-            if (mBluetooth.isBluetoothConnected()) {
+            if (mBluetooth.isBluetoothConnected()
+                    && (mBluetooth.isBluetoothAudioActive()
+                    || !mBluetooth.isBluetoothAudioProfileOnly())) {
+                contentDescription = mContext.getString(
+                        R.string.accessibility_bluetooth_connected);
                 int batteryLevel = mBluetooth.getConnectedDevices().get(0).getBatteryLevel();
                 if (batteryLevel == 100) {
                     iconId = R.drawable.stat_sys_data_bluetooth_connected_battery_9;

@@ -222,6 +222,7 @@ public class AppOpsControllerImpl implements AppOpsController,
         mBGHandler.removeCallbacksAndMessages(item);
         mBGHandler.scheduleRemoval(item, NOTED_OP_TIME_DELAY_MS);
         return createdNew;
+
     }
 
     /**

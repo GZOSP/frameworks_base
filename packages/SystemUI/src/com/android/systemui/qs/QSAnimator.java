@@ -30,6 +30,7 @@ import com.android.systemui.qs.TouchAnimator.Builder;
 import com.android.systemui.qs.TouchAnimator.Listener;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
+import com.android.systemui.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,6 +67,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private TouchAnimator mNonfirstPageDelayedAnimator;
     // This animates fading of SecurityFooter and media divider
     private TouchAnimator mAllPagesDelayedAnimator;
+    private TouchAnimator mBrightnessAnimator;
     private boolean mNeedsAnimatorUpdate = false;
 
     private boolean mOnKeyguard;
@@ -278,8 +280,16 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         }
 
         View brightnessView = mQsPanel.getBrightnessView();
-        if (brightnessView != null) {
+        if (brightnessView != null && Utils.useQsMediaPlayer(null) && !mQsPanel.shouldUseHorizontalLayout()
+                && mQsPanel.isMediaHostVisible()) {
+            View mQsPanelMediaHostView = mQsPanel.getMediaHost().getHostView();
+            View mQuickQsPanelMediaHostView = mQuickQsPanel.getMediaHost().getHostView();
+            float translation = mQsPanelMediaHostView.getHeight() - mQuickQsPanelMediaHostView.getHeight();
+            mBrightnessAnimator = new TouchAnimator.Builder().addFloat(brightnessView, "translationY", translation, 0)
+                    .build();
             mAllViews.add(brightnessView);
+        } else {
+            mBrightnessAnimator = null;
         }
 
         if (mAllowFancy) {
@@ -374,6 +384,9 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             }
         }
         mLastPosition = position;
+        if (mBrightnessAnimator != null) {
+            mBrightnessAnimator.setPosition(position);
+        }
         if (mOnFirstPage && mAllowFancy) {
             mQuickQsPanel.setAlpha(1);
             mFirstPageAnimator.setPosition(position);

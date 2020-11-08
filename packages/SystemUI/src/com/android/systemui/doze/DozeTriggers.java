@@ -42,7 +42,7 @@ import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dock.DockManager;
 import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.util.Assert;
-import com.android.internal.util.custom.LineageButtons;
+import com.android.internal.util.gzosp.LineageButtons;
 import com.android.systemui.util.sensors.AsyncSensorManager;
 import com.android.systemui.util.sensors.ProximitySensor;
 import com.android.systemui.util.wakelock.WakeLock;
@@ -289,6 +289,11 @@ public class DozeTriggers implements DozeMachine.Part {
     }
 
     private void gentleWakeUp(int reason) {
+        if (!mConfig.deviceHasSoli() && !mConfig.alwaysOnEnabled(UserHandle.USER_CURRENT)
+                && mConfig.isAmbientGestureEnabled(UserHandle.USER_CURRENT)) {
+            requestPulse(reason, true /* alreadyPerformedProxCheck */, null /* onPulseSupressedListener */);
+            return;
+        }
         // Log screen wake up reason (lift/pickup, tap, double-tap)
         mMetricsLogger.write(new LogMaker(MetricsEvent.DOZING)
                 .setType(MetricsEvent.TYPE_UPDATE)

@@ -20,4 +20,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="global_action_restart_advanced">Avanzate</string>
+
+    <string name="screenrecord_stopdot_label">Mostra stop intermittente.\nPremi a lungo per spostarlo</string>
+    <string name="screenrecord_lowquality_label">Bassa qualità e file più piccolo</string>
 </resources>

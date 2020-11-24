@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.systemui.dagger;
+package com.google.android.systemui.dagger;
 
 import static com.android.systemui.Dependency.ALLOW_NOTIFICATION_LONG_PRESS_NAME;
 import static com.android.systemui.Dependency.LEAK_REPORT_EMAIL_NAME;
@@ -36,6 +36,7 @@ import com.android.systemui.plugins.qs.QSFactory;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.power.EnhancedEstimates;
 import com.android.systemui.power.EnhancedEstimatesImpl;
+import com.android.systemui.qs.dagger.QSModule;
 import com.android.systemui.qs.tileimpl.QSFactoryImpl;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.RecentsImplementation;
@@ -59,6 +60,9 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedControllerImpl;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 
+import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
+import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -70,8 +74,8 @@ import dagger.Provides;
  * A dagger module for injecting default implementations of components of System UI that may be
  * overridden by the System UI implementation.
  */
-@Module(includes = {DividerModule.class})
-public abstract class SystemUIDefaultModule {
+@Module(includes = {DividerModule.class, QSModule.class})
+public abstract class SystemUIGoogleModule {
 
     @Singleton
     @Provides
@@ -82,11 +86,11 @@ public abstract class SystemUIDefaultModule {
     }
 
     @Binds
-    abstract EnhancedEstimates bindEnhancedEstimates(EnhancedEstimatesImpl enhancedEstimates);
+    abstract EnhancedEstimates bindEnhancedEstimates(EnhancedEstimatesGoogleImpl enhancedEstimates);
 
     @Binds
     abstract NotificationLockscreenUserManager bindNotificationLockscreenUserManager(
-            NotificationLockscreenUserManagerImpl notificationLockscreenUserManager);
+            NotificationLockscreenUserManagerGoogle notificationLockscreenUserManager);
 
     @Provides
     @Singleton
@@ -102,7 +106,7 @@ public abstract class SystemUIDefaultModule {
 
     @Binds
     @Singleton
-    public abstract QSFactory provideQSFactory(QSFactoryImpl qsFactoryImpl);
+    public abstract QSFactory bindQSFactory(QSFactoryImpl qsFactoryImpl);
 
     @Binds
     abstract DockManager bindDockManager(DockManagerImpl dockManager);

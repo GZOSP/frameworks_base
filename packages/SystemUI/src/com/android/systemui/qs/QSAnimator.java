@@ -30,7 +30,6 @@ import com.android.systemui.qs.TouchAnimator.Builder;
 import com.android.systemui.qs.TouchAnimator.Listener;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
-import com.android.systemui.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -279,20 +278,19 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             count++;
         }
 
-        View brightnessView = mQsPanel.getBrightnessView();
-        if (brightnessView != null && Utils.useQsMediaPlayer(null) && !mQsPanel.shouldUseHorizontalLayout()
-                && mQsPanel.isMediaHostVisible()) {
-            View mQsPanelMediaHostView = mQsPanel.getMediaHost().getHostView();
-            View mQuickQsPanelMediaHostView = mQuickQsPanel.getMediaHost().getHostView();
-            float translation = mQsPanelMediaHostView.getHeight() - mQuickQsPanelMediaHostView.getHeight();
-            mBrightnessAnimator = new TouchAnimator.Builder().addFloat(brightnessView, "translationY", translation, 0)
-                    .build();
-            mAllViews.add(brightnessView);
-        } else {
-            mBrightnessAnimator = null;
-        }
-
         if (mAllowFancy) {
+            // Make brightness appear static position and alpha in through second half.
+            View brightness = mQsPanel.getBrightnessView();
+            if (brightness != null) {
+                firstPageBuilder.addFloat(brightness, "translationY", heightDiff, 0);
+                mBrightnessAnimator = new TouchAnimator.Builder()
+                        .addFloat(brightness, "alpha", 0, 1)
+                        .setStartDelay(.5f)
+                        .build();
+                mAllViews.add(brightness);
+            } else {
+                mBrightnessAnimator = null;
+            }
             mFirstPageAnimator = firstPageBuilder
                     .setListener(this)
                     .build();
@@ -384,27 +382,21 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
             }
         }
         mLastPosition = position;
-        if (mBrightnessAnimator != null) {
-            mBrightnessAnimator.setPosition(position);
-        }
         if (mOnFirstPage && mAllowFancy) {
             mQuickQsPanel.setAlpha(1);
             mFirstPageAnimator.setPosition(position);
             mFirstPageDelayedAnimator.setPosition(position);
             mTranslationXAnimator.setPosition(position);
             mTranslationYAnimator.setPosition(position);
+            if (mBrightnessAnimator != null) {
+                mBrightnessAnimator.setPosition(position);
+            }
         } else {
             mNonfirstPageAnimator.setPosition(position);
             mNonfirstPageDelayedAnimator.setPosition(position);
         }
         if (mAllowFancy) {
             mAllPagesDelayedAnimator.setPosition(position);
-        }
-
-        if (position == 0f) {
-            mQuickQsPanel.getBrightnessView().setVisibility(View.VISIBLE);
-        } else {
-            mQuickQsPanel.getBrightnessView().setVisibility(View.INVISIBLE);
         }
     }
 

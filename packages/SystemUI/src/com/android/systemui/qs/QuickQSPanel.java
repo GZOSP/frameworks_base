@@ -140,12 +140,6 @@ public class QuickQSPanel extends QSPanel {
     }
 
     @Override
-    public void setListening(boolean listening) {
-        super.setListening(listening);
-        setBrightnessListening(listening);
-    }
-
-    @Override
     protected String getDumpableTag() {
         return TAG;
     }
@@ -182,6 +176,14 @@ public class QuickQSPanel extends QSPanel {
         mMaxTiles = maxTiles;
         if (mHost != null) {
             setTiles(mHost.getTiles());
+        }
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (QS_SHOW_BRIGHTNESS.equals(key)) {
+            // No Brightness or Tooltip for you!
+            super.onTuningChanged(key, "0");
         }
     }
 

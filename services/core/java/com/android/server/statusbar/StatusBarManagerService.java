@@ -757,7 +757,6 @@ public class StatusBarManagerService extends IStatusBarService.Stub implements D
         return mTracingEnabled;
     }
 
-    // TODO(b/117478341): make it aware of multi-display if needed.
     @Override
     public void toggleCameraFlash() {
         if (mBar != null) {
@@ -783,13 +782,18 @@ public class StatusBarManagerService extends IStatusBarService.Stub implements D
         }
     }
 
+    @Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        if (mBar != null) {
+            try {
+                mBar.setBlockedGesturalNavigation(blocked);
+            } catch (RemoteException ex) {
+                // do nothing
+            }
+        }
+    }
+
     // TODO(b/117478341): make it aware of multi-display if needed.
-    /**
-     * Disable additional status bar features. Pass the bitwise-or of the DISABLE2_* flags.
-     * To re-enable everything, pass {@link #DISABLE2_NONE}.
-     *
-     * Warning: Only pass DISABLE2_* flags into this function, do not use DISABLE_* flags.
-     */
     @Override
     public void disable2(int what, IBinder token, String pkg) {
         disable2ForUser(what, token, pkg, mCurrentUserId);

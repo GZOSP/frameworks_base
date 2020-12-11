@@ -173,6 +173,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
     private int mRightInset;
     private int mSysUiFlags;
 
+    private boolean mBlockedGesturalNavigation;
+
     private final GestureNavigationSettingsObserver mGestureNavigationSettingsObserver;
 
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
@@ -231,7 +233,6 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
             }
         }
 
-        Dependency.get(ProtoTracer.class).add(this);
         mLongPressTimeout = Math.min(MAX_LONG_PRESS_TIMEOUT,
                 ViewConfiguration.getLongPressTimeout());
 
@@ -286,6 +287,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
      */
     public void onNavBarAttached() {
         mIsAttached = true;
+        Dependency.get(ProtoTracer.class).add(this);
         mOverviewProxyService.addCallback(mQuickSwitchListener);
         updateIsEnabled();
         startTracking();
@@ -296,6 +298,7 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
      */
     public void onNavBarDetached() {
         mIsAttached = false;
+        Dependency.get(ProtoTracer.class).remove(this);
         mOverviewProxyService.removeCallback(mQuickSwitchListener);
         updateIsEnabled();
         stopTracking();
@@ -650,6 +653,10 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         return topActivity != null && mGestureBlockingActivities.contains(topActivity);
     }
 
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        mBlockedGesturalNavigation = blocked;
+    }
+
     @Override
     public void writeToProto(SystemUiTraceProto proto) {
         if (proto.edgeBackGestureHandler == null) {
@@ -664,7 +671,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         }
 
         public void onInputEvent(InputEvent event) {
-            EdgeBackGestureHandler.this.onInputEvent(event);
+            if (!mBlockedGesturalNavigation) {
+                EdgeBackGestureHandler.this.onInputEvent(event);
+            }
             finishInputEvent(event, true);
         }
     }

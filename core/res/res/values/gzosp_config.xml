@@ -34,4 +34,7 @@
     </string-array>
 
     <bool name="config_has_Soli">false</bool>
+
+    <!-- Default value for Horizon light color (Blue) -->
+    <integer name="config_AmbientPulseLightColor">0x3980FF</integer>
 </resources>
